@@ -1,0 +1,38 @@
+name: Nuget
+
+on:
+  release:
+    types: [created]
+    
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+    - name: Publish Omtt.Api
+      uses: brandedoutcast/publish-nuget@v2.5.5
+      with:
+          PROJECT_FILE_PATH: Omtv.Api/Omtv.Api.csproj
+          NUGET_KEY: ${{secrets.NUGET_TOKEN}}
+    - name: Publish Omtv.Engine
+      uses: brandedoutcast/publish-nuget@v2.5.5
+      with:
+          PROJECT_FILE_PATH: Omtv.Engine/Omtv.Engine.csproj
+          NUGET_KEY: ${{secrets.NUGET_TOKEN}}
+    - name: Publish Omtv.Csv
+      uses: brandedoutcast/publish-nuget@v2.5.5
+      with:
+          PROJECT_FILE_PATH: Omtv.Csv/Omtt.Csv.csproj
+          NUGET_KEY: ${{secrets.NUGET_TOKEN}}
