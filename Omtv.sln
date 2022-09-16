@@ -2,6 +2,12 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Omtv.Api", "Omtv.Api\Omtv.Api.csproj", "{00E1DAA1-E117-4F0B-ADE8-18479A44AAF7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Omtv.Engine", "Omtv.Engine\Omtv.Engine.csproj", "{159C0682-78CE-44ED-88CF-F187E1DCE173}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Omtv.Csv", "Omtv.Csv\Omtv.Csv.csproj", "{86B4B128-E9BD-403C-8BA3-E55529E06DD0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Omtv.Tests", "Omtv.Tests\Omtv.Tests.csproj", "{1CAC249A-597D-4FA1-A2B5-F7E4771B7908}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +18,17 @@ Global
 		{00E1DAA1-E117-4F0B-ADE8-18479A44AAF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00E1DAA1-E117-4F0B-ADE8-18479A44AAF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00E1DAA1-E117-4F0B-ADE8-18479A44AAF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{159C0682-78CE-44ED-88CF-F187E1DCE173}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{159C0682-78CE-44ED-88CF-F187E1DCE173}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{159C0682-78CE-44ED-88CF-F187E1DCE173}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{159C0682-78CE-44ED-88CF-F187E1DCE173}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86B4B128-E9BD-403C-8BA3-E55529E06DD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86B4B128-E9BD-403C-8BA3-E55529E06DD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86B4B128-E9BD-403C-8BA3-E55529E06DD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86B4B128-E9BD-403C-8BA3-E55529E06DD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CAC249A-597D-4FA1-A2B5-F7E4771B7908}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CAC249A-597D-4FA1-A2B5-F7E4771B7908}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CAC249A-597D-4FA1-A2B5-F7E4771B7908}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CAC249A-597D-4FA1-A2B5-F7E4771B7908}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

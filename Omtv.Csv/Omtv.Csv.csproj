@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>9</LangVersion>
+        <Nullable>enable</Nullable>
+        <Title>Omtv Api</Title>
+        <Authors>Ilia Tikhonov</Authors>
+        <Description>Csv visualizer for Omtv (One More Table Visualizer)</Description>
+        <PackageProjectUrl>https://github.com/tihilv/Omtv</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/tihilv/Omtv</RepositoryUrl>
+        <Version>1.0.0</Version>
+    </PropertyGroup>
+
+</Project>
