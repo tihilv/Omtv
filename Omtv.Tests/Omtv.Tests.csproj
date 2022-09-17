@@ -17,6 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Omtv.Csv\Omtv.Csv.csproj" />
       <ProjectReference Include="..\Omtv.Engine\Omtv.Engine.csproj" />
     </ItemGroup>
 

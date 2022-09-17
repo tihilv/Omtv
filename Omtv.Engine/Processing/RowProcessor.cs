@@ -20,10 +20,10 @@ namespace Omtv.Engine.Processing
             var style = StyleProcessor.CombineStyle(context, newStyle);
             context.Document.CurrentTable.CurrentRow.Set(style);
 
-            context.Output.RowStart(context.Document);
+            await context.Output.RowStartAsync(context.Document);
             await context.Flow.ProcessAsync(reader, context, _processors);
-            CellProcessor.ProcessSpannedCells(context);
-            context.Output.RowEnd(context.Document);
+            await CellProcessor.ProcessSpannedCellsAsync(context);
+            await context.Output.RowEndAsync(context.Document);
         }
     }
 }

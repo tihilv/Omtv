@@ -27,8 +27,8 @@ namespace Omtv.Engine
             var visualizer = new TableVisualizer();
             await visualizer.ProcessAsync(inputStream, output);
         }
-        
-        public static async Task<String> TransformAsync(String input, ITableOutput output)
+
+        public static async Task TransformAsync(String input, ITableOutput output)
         {
             using (var inputStream = new MemoryStream())
             {
@@ -37,16 +37,10 @@ namespace Omtv.Engine
 
                 inputStream.Position = 0;
 
-                using (var outputStream = new MemoryStream())
-                {
-                    await TransformAsync(inputStream, output);
-
-                    using (var reader = new StreamReader(outputStream))
-                        return await reader.ReadToEndAsync();
-                }
+                await TransformAsync(inputStream, output);
             }
         }
-        
+
         private async Task ProcessAsync(Stream inputStream, ITableOutput output)
         {
             var xmlSettings = new XmlReaderSettings() { IgnoreComments = true, Async = true};
@@ -54,6 +48,7 @@ namespace Omtv.Engine
             using (var reader = XmlReader.Create(inputStream, xmlSettings))
             {
                 await ProcessAsync(reader, context, _partProcessors);
+                await output.DoneAsync(context.Document);
             }
         }
 

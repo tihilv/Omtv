@@ -27,19 +27,19 @@ namespace Omtv.Engine.Processing
             await reader.ReadAsync();
             var value = reader.Value;
             
-            ProcessSpannedCells(context);
+            await ProcessSpannedCellsAsync(context);
 
             context.Document.CurrentTable.CurrentRow.CurrentCell.Set(style, value, rowSpan, colSpan);
-            context.Document.SpanProcessor.Register(rowSpan, colSpan);
-            context.Output.Cell(context.Document);
+            context.Document.SpanStore.Register(rowSpan, colSpan);
+            await context.Output.CellAsync(context.Document);
         }
 
-        internal static void ProcessSpannedCells(ProcessingContext context)
+        internal static async ValueTask ProcessSpannedCellsAsync(ProcessingContext context)
         {
-            while (context.Document.SpanProcessor.IsSpanned())
+            while (context.Document.SpanStore.IsSpanned())
             {
                 context.Document.CurrentTable.CurrentRow.CurrentCell.SetSpanned();
-                context.Output.Cell(context.Document);
+                await context.Output.CellAsync(context.Document);
             }
         }
     }

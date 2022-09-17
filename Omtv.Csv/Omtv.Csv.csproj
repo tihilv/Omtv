@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>9</LangVersion>
         <Nullable>enable</Nullable>
         <Title>Omtv Api</Title>
@@ -11,5 +11,9 @@
         <RepositoryUrl>https://github.com/tihilv/Omtv</RepositoryUrl>
         <Version>1.0.0</Version>
     </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Omtv.Api\Omtv.Api.csproj" />
+    </ItemGroup>
 
 </Project>

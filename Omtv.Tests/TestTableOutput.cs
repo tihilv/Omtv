@@ -8,32 +8,42 @@ internal class TestTableOutput : ITableOutput
 {
     private readonly StringBuilder _stringBuilder = new StringBuilder();
     
-    public void TableStart(Document document)
+    public ValueTask TableStartAsync(Document document)
     {
         _stringBuilder.Append("t,");
+        return ValueTask.CompletedTask;
     }
 
-    public void RowStart(Document document)
+    public ValueTask RowStartAsync(Document document)
     {
         _stringBuilder.Append("r,");
+        return ValueTask.CompletedTask;
     }
 
-    public void Cell(Document document)
+    public ValueTask CellAsync(Document document)
     {
         if (document.CurrentTable.CurrentRow.CurrentCell.Spanned)
             _stringBuilder.Append($"c-,");
         else
             _stringBuilder.Append($"c:{document.CurrentTable.CurrentRow.CurrentCell.Content},");
+        return ValueTask.CompletedTask;
     }
 
-    public void RowEnd(Document document)
+    public ValueTask RowEndAsync(Document document)
     {
         _stringBuilder.Append("/r,");
+        return ValueTask.CompletedTask;
     }
 
-    public void TableEnd(Document document)
+    public ValueTask TableEndAsync(Document document)
     {
         _stringBuilder.Append("/t,");
+        return ValueTask.CompletedTask;
+    }
+
+    public ValueTask DoneAsync(Document document)
+    {
+        return ValueTask.CompletedTask;
     }
 
     public override String ToString()

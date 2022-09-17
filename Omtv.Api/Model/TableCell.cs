@@ -12,7 +12,7 @@ namespace Omtv.Api.Model
         public Int32 Index { get; private set; }
         public Boolean Spanned { get; private set; }
 
-        internal void Set(Style style, string content, Byte rowSpan, Byte colSpan)
+        internal void Set(Style style, String? content, Byte rowSpan, Byte colSpan)
         {
             Index++;
             Style = style;
@@ -29,7 +29,7 @@ namespace Omtv.Api.Model
 
         internal void SetSpanned()
         {
-            Index++;
+            Set(Style, null, 0, 0);
             Spanned = true;
         }
     }

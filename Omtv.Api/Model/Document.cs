@@ -11,7 +11,7 @@ namespace Omtv.Api.Model
     {
         private Table _currentTable;
         
-        internal SpanProcessor SpanProcessor { get; private set; }
+        internal SpanStore SpanStore { get; private set; }
         
         public Header Header { get; set; }
         public Dictionary<String, Style> Styles { get; set; }
@@ -32,7 +32,7 @@ namespace Omtv.Api.Model
             Styles = new Dictionary<String, Style>();
             _currentTable = new Table();
             TableIndex = 0;
-            SpanProcessor = new SpanProcessor(_currentTable);
+            SpanStore = new SpanStore(_currentTable);
         }
     }
 }

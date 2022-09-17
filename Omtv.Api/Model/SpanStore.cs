@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace Omtv.Api.Model
 {
-    internal class SpanProcessor
+    internal class SpanStore
     {
         private readonly Table _table;
         private readonly HashSet<SpannedCell> _spannedCells;
 
-        public SpanProcessor(Table table)
+        public SpanStore(Table table)
         {
             _table = table;
             _spannedCells = new HashSet<SpannedCell>();

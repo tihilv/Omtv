@@ -43,4 +43,21 @@ public class WorkflowTests
         
         Assert.That(output.ToString(), Is.EqualTo("t,r,c:v11,c:v12,c:v13,/r,r,c:v21,c-,c:v23,/r,/t"));
     }
+
+    [Test]
+    public async Task SpanIntersectionExceptionTest()
+    {
+        var output = new TestTableOutput();
+        try
+        {
+            await TableVisualizer.TransformAsync("<document><header width=\"297mm\" height=\"210mm\" name=\"Some name\"><style name=\"default\" backColor=\"white\"/><style name=\"odd\" backColor=\"gray\"/></header>" +
+                                                 "<table><row><cell>v11</cell><cell rowSpan=\"2\">v12</cell><cell>v13</cell></row><row><cell colSpan=\"2\">v21</cell><cell>v23</cell></row></table></document>", output);
+            
+            Assert.Fail();
+        }
+        catch(ArgumentException)
+        {
+            // ok
+        }
+    }
 }

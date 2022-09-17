@@ -23,9 +23,9 @@ namespace Omtv.Engine.Processing
             var style = StyleProcessor.CombineStyle(context, newStyle);
             context.Document.CurrentTable.Set(tableName, style);
 
-            context.Output.TableStart(context.Document);
+            await context.Output.TableStartAsync(context.Document);
             await context.Flow.ProcessAsync(reader, context, _processors);
-            context.Output.TableEnd(context.Document);
+            await context.Output.TableEndAsync(context.Document);
         }
     }
 }
