@@ -12,7 +12,7 @@ namespace Omtv.Tests
     internal class TestTableOutput : ITableOutput
     {
         private readonly StringBuilder _stringBuilder = new StringBuilder();
-        public List<Style> Styles { get; private set; }
+        public List<Style>? Styles { get; private set; }
 
 
         public ValueTask StartAsync(Document document)

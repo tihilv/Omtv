@@ -71,7 +71,7 @@ namespace Omtv.Tests
             await TableVisualizer.TransformAsync("<document><header width=\"297mm\" height=\"210mm\" name=\"Some name\"><style name=\"default\" backColor=\"white\"/><style name=\"odd\" backColor=\"gray\"/><style name=\"even\" backColor=\"green\"/></header>" +
                                                  "<table><row><cell>v11</cell><cell rowSpan=\"2\">v12</cell><cell>v13</cell></row><row><cell>v21</cell><cell>v23</cell></row></table></document>", output);
 
-            Assert.That(output.Styles.Count, Is.EqualTo(3));
+            Assert.That(output.Styles!.Count, Is.EqualTo(3));
         }
     }
 }
