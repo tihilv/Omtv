@@ -39,5 +39,5 @@ jobs:
     - name: Publish Omtv.Html
       uses: alirezanet/publish-nuget@v3.0.4
       with:
-          PROJECT_FILE_PATH: Omtv.Api/Omtv.Html.csproj
+          PROJECT_FILE_PATH: Omtv.Html/Omtv.Html.csproj
           NUGET_KEY: ${{secrets.NUGET_TOKEN}}
