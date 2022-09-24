@@ -1,12 +1,14 @@
+using NUnit.Framework;
 using Omtv.Api.Primitives;
 
-namespace Omtv.Tests;
-
-public class FontTests
+namespace Omtv.Tests
 {
-    [Test]
-    public void RegularTest()
+    public class FontTests
     {
-        Assert.That(FontInfo.Parse("'Times new roman' 14"), Is.EqualTo(new FontInfo("Times new roman", new Measure(14, Unit.Em))));
+        [Test]
+        public void RegularTest()
+        {
+            Assert.That(FontInfo.Parse("'Times new roman' 14"), Is.EqualTo(new FontInfo("Times new roman", new Measure(14, Unit.Em))));
+        }
     }
 }

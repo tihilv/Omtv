@@ -1,12 +1,14 @@
-﻿using Omtv.Api.Primitives;
+﻿using NUnit.Framework;
+using Omtv.Api.Primitives;
 
-namespace Omtv.Tests;
-
-public class SpanningTests
+namespace Omtv.Tests
 {
-    [Test]
-    public void HexTest()
+    public class SpanningTests
     {
-        Assert.That(ColorInfo.Parse("#abcdef"), Is.EqualTo(new ColorInfo(255, 171, 205, 239)));
+        [Test]
+        public void HexTest()
+        {
+            Assert.That(ColorInfo.Parse("#abcdef"), Is.EqualTo(new ColorInfo(255, 171, 205, 239)));
+        }
     }
 }
