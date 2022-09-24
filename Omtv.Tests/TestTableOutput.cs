@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Omtv.Api.Model;
+using Omtv.Api.Primitives;
 using Omtv.Api.Processing;
 
 namespace Omtv.Tests
@@ -9,9 +12,12 @@ namespace Omtv.Tests
     internal class TestTableOutput : ITableOutput
     {
         private readonly StringBuilder _stringBuilder = new StringBuilder();
+        public List<Style> Styles { get; private set; }
+
 
         public ValueTask StartAsync(Document document)
         {
+            Styles = document.Styles.Values.ToList();
             return ValueTask.CompletedTask;
         }
 

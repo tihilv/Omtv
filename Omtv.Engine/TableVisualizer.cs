@@ -56,7 +56,7 @@ namespace Omtv.Engine
         {
             string elementName;
             int depth = -1;
-            while ((depth == -1 || depth == reader.Depth) && await reader.ReadAsync())
+            while ((depth == -1 || depth <= reader.Depth) && await reader.ReadAsync())
             {
                 if (depth == -1)
                     depth = reader.Depth;
@@ -70,11 +70,11 @@ namespace Omtv.Engine
                         throw new ArgumentException($"Unknown element '{reader.Name}'.");
 
                     await processor.ProcessAsync(reader, context);
-                    if (reader.IsStartElement() || reader.Name != elementName)
-                        await reader.ReadAsync(); // close tag
+                    //if (reader.IsStartElement() || reader.Name != elementName)
+                    //    await reader.ReadAsync(); // close tag
                 }
-                else
-                    return;
+//                else
+//                    return;
             }
         }
     }

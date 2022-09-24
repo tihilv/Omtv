@@ -9,7 +9,7 @@
         <Description>Csv visualizer for Omtv (One More Table Visualizer)</Description>
         <PackageProjectUrl>https://github.com/tihilv/Omtv</PackageProjectUrl>
         <RepositoryUrl>https://github.com/tihilv/Omtv</RepositoryUrl>
-        <Version>1.0.3</Version>
+        <Version>1.0.4</Version>
     </PropertyGroup>
 
     <ItemGroup>
