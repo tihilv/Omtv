@@ -21,7 +21,7 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
-    - name: Publish Omtt.Api
+    - name: Publish Omtv.Api
       uses: brandedoutcast/publish-nuget@v2.5.5
       with:
           PROJECT_FILE_PATH: Omtv.Api/Omtv.Api.csproj
@@ -34,5 +34,10 @@ jobs:
     - name: Publish Omtv.Csv
       uses: brandedoutcast/publish-nuget@v2.5.5
       with:
-          PROJECT_FILE_PATH: Omtv.Csv/Omtt.Csv.csproj
+          PROJECT_FILE_PATH: Omtv.Csv/Omtv.Csv.csproj
+          NUGET_KEY: ${{secrets.NUGET_TOKEN}}
+    - name: Publish Omtv.Html
+      uses: brandedoutcast/publish-nuget@v2.5.5
+      with:
+          PROJECT_FILE_PATH: Omtv.Api/Omtv.Html.csproj
           NUGET_KEY: ${{secrets.NUGET_TOKEN}}
