@@ -1,4 +1,4 @@
-namespace Omtv.Api.Model
+namespace Omtv.Api.Primitives
 {
     public enum Side: byte
     {

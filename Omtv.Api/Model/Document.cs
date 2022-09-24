@@ -9,30 +9,18 @@ namespace Omtv.Api.Model
 {
     public class Document
     {
-        private Table _currentTable;
-        
         internal SpanStore SpanStore { get; private set; }
         
-        public Header Header { get; set; }
-        public Dictionary<String, Style> Styles { get; set; }
-        public Int32 TableIndex { get; private set; }
-        public Table CurrentTable
-        {
-            get => _currentTable;
-            set
-            {
-                _currentTable = value;
-                TableIndex++;
-            }
-        }
+        public Header Header { get; }
+        public Dictionary<String, Style> Styles { get; }
+        public Table Table { get; }
 
         public Document()
         {
             Header = new Header();
             Styles = new Dictionary<String, Style>();
-            _currentTable = new Table();
-            TableIndex = 0;
-            SpanStore = new SpanStore(_currentTable);
+            Table = new Table();
+            SpanStore = new SpanStore(Table);
         }
     }
 }

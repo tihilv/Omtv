@@ -7,7 +7,12 @@ namespace Omtv.Tests;
 internal class TestTableOutput : ITableOutput
 {
     private readonly StringBuilder _stringBuilder = new StringBuilder();
-    
+
+    public ValueTask StartAsync(Document document)
+    {
+        return ValueTask.CompletedTask;
+    }
+
     public ValueTask TableStartAsync(Document document)
     {
         _stringBuilder.Append("t,");
@@ -22,10 +27,10 @@ internal class TestTableOutput : ITableOutput
 
     public ValueTask CellAsync(Document document)
     {
-        if (document.CurrentTable.CurrentRow.CurrentCell.Spanned)
+        if (document.Table.Row.Cell.Spanned)
             _stringBuilder.Append($"c-,");
         else
-            _stringBuilder.Append($"c:{document.CurrentTable.CurrentRow.CurrentCell.Content},");
+            _stringBuilder.Append($"c:{document.Table.Row.Cell.Content},");
         return ValueTask.CompletedTask;
     }
 
@@ -41,7 +46,7 @@ internal class TestTableOutput : ITableOutput
         return ValueTask.CompletedTask;
     }
 
-    public ValueTask DoneAsync(Document document)
+    public ValueTask EndAsync(Document document)
     {
         return ValueTask.CompletedTask;
     }

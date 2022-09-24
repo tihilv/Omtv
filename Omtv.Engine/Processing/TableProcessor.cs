@@ -15,14 +15,16 @@ namespace Omtv.Engine.Processing
         {
             new RowProcessor()
         };
-        
+
+        private Boolean _initialized;
         public async Task ProcessAsync(XmlReader reader, ProcessingContext context)
         {
             var tableName = reader.GetAttribute(TableName);
-            var newStyle = StyleProcessor.GetStyle(reader);
-            var style = StyleProcessor.CombineStyle(context, newStyle);
-            context.Document.CurrentTable.Set(tableName, style);
+            var style = StyleProcessor.GetStyle(reader);
+            context.Document.Table.Set(tableName, style);
 
+            if (!_initialized)
+                await context.Output.StartAsync(context.Document);
             await context.Output.TableStartAsync(context.Document);
             await context.Flow.ProcessAsync(reader, context, _processors);
             await context.Output.TableEndAsync(context.Document);

@@ -48,15 +48,19 @@ namespace Omtv.Engine
             using (var reader = XmlReader.Create(inputStream, xmlSettings))
             {
                 await ProcessAsync(reader, context, _partProcessors);
-                await output.DoneAsync(context.Document);
+                await output.EndAsync(context.Document);
             }
         }
 
         public async Task ProcessAsync(XmlReader reader, ProcessingContext context, IPartProcessor[] processors)
         {
             string elementName;
-            while (await reader.ReadAsync())
+            int depth = -1;
+            while ((depth == -1 || depth == reader.Depth) && await reader.ReadAsync())
             {
+                if (depth == -1)
+                    depth = reader.Depth;
+                
                 if (reader.IsStartElement())
                 {
                     elementName = reader.Name;

@@ -16,7 +16,7 @@ namespace Omtv.Api.Model
 
         public bool IsSpanned()
         {
-            var spannedCell = new SpannedCell(_table.CurrentRow.Index, _table.CurrentRow.CurrentCell.Index + 1); // next cell to process
+            var spannedCell = new SpannedCell(_table.Row.Index, _table.Row.Cell.Index + 1); // next cell to process
             return _spannedCells.Remove(spannedCell);
         }
 
@@ -25,8 +25,8 @@ namespace Omtv.Api.Model
             if (rowSpan > 1 || colSpan > 1)
             {
                 bool current = true;
-                for (int row = _table.CurrentRow.Index; row < _table.CurrentRow.Index + rowSpan; row++)
-                for (int column = _table.CurrentRow.CurrentCell.Index; column < _table.CurrentRow.CurrentCell.Index + colSpan; column++)
+                for (int row = _table.Row.Index; row < _table.Row.Index + rowSpan; row++)
+                for (int column = _table.Row.Cell.Index; column < _table.Row.Cell.Index + colSpan; column++)
                 {
                     if (current)
                         current = false;

@@ -5,26 +5,29 @@ namespace Omtv.Api.Model
 {
     public class TableRow
     {
-        public Style Style { get; private set; } = null!;
+        public Style? Style { get; private set; } = null!;
         public Int32 Index { get; private set; }
-        public TableCell CurrentCell { get; }
+        
+        public Measure? Height { get; private set; }
+        public TableCell Cell { get; }
 
         public TableRow()
         {
-            CurrentCell = new TableCell();
+            Cell = new TableCell();
         }
 
-        internal void Set(Style style)
+        internal void Set(Measure? height, Style? style)
         {
             Index++;
-            CurrentCell.ResetIndex();
+            Cell.ResetIndex();
             Style = style;
+            Height = height;
         }
 
         internal void ResetIndex()
         {
             Index = 0;
-            CurrentCell.ResetIndex();
+            Cell.ResetIndex();
         }
     }
 }

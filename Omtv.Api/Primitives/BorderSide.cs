@@ -2,7 +2,7 @@ using System;
 
 namespace Omtv.Api.Primitives
 {
-    public struct BorderSide
+    public struct BorderSide : IEquatable<BorderSide>
     {
         public readonly Measure? Thickness;
         public readonly ColorInfo? Color;
@@ -30,6 +30,34 @@ namespace Omtv.Api.Primitives
                 color = ColorInfo.Parse(parts[1]);
 
             return new BorderSide(thickness, color);
+        }
+
+        public bool Equals(BorderSide other)
+        {
+            return Nullable.Equals(Thickness, other.Thickness) && Nullable.Equals(Color, other.Color);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is BorderSide other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (Thickness.GetHashCode() * 397) ^ Color.GetHashCode();
+            }
+        }
+
+        public static bool operator ==(BorderSide left, BorderSide right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(BorderSide left, BorderSide right)
+        {
+            return !left.Equals(right);
         }
     }
 }

@@ -26,8 +26,8 @@ namespace Omtv.Engine.Processing
             var height = reader.GetAttribute(HeightName);
 
             context.Document.Header.SetDocumentName(documentName);
-            context.Document.Header.SetPageHeight(Measure.Parse(height));
-            context.Document.Header.SetPageWidth(Measure.Parse(width));
+            context.Document.Header.SetPageHeight(Measure.ParseExact(height));
+            context.Document.Header.SetPageWidth(Measure.ParseExact(width));
 
             await context.Flow.ProcessAsync(reader, context, _processors);
         }

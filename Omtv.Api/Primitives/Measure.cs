@@ -4,8 +4,10 @@ using System.Globalization;
 
 namespace Omtv.Api.Primitives
 {
-    public struct Measure
+    public struct Measure : IEquatable<Measure>
     {
+        public static readonly Measure Null = new Measure(0, Unit.Pixel);
+        
         public readonly Unit Unit;
         public readonly Double Value;
 
@@ -28,8 +30,20 @@ namespace Omtv.Api.Primitives
             return $"{Value} {Unit}";
         }
 
-        public static Measure Parse(String value, Unit? defaultUnit = null)
+        public static Measure ParseExact(String value, Unit? defaultUnit = null)
         {
+            var result = Parse(value, defaultUnit);
+            if (result == null)
+                throw new ArgumentNullException();
+
+            return result.Value;
+        }
+        
+        public static Measure? Parse(String? value, Unit? defaultUnit = null)
+        {
+            if (value == null)
+                return null;
+            
             var span = value.AsSpan().Trim();
             
             foreach(var v in _units)
@@ -40,6 +54,34 @@ namespace Omtv.Api.Primitives
                 return new Measure(Double.Parse(span.Trim(),NumberStyles.Float, CultureInfo.InvariantCulture), defaultUnit.Value);
 
             throw new FormatException($"Unable to parse measure '{value}'.");
+        }
+
+        public bool Equals(Measure other)
+        {
+            return Unit == other.Unit && Value.Equals(other.Value);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is Measure other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return ((int)Unit * 397) ^ Value.GetHashCode();
+            }
+        }
+
+        public static bool operator ==(Measure left, Measure right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Measure left, Measure right)
+        {
+            return !left.Equals(right);
         }
     }
 }

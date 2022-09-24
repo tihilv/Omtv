@@ -1,12 +1,15 @@
 using System;
 using System.Threading.Tasks;
 using System.Xml;
+using Omtv.Api.Primitives;
 using Omtv.Api.Processing;
 
 namespace Omtv.Engine.Processing
 {
     public class RowProcessor: IPartProcessor
     {
+        private const String HeightName = "height";
+        
         public String Name => "row";
 
         private readonly IPartProcessor[] _processors = new[]
@@ -16,9 +19,10 @@ namespace Omtv.Engine.Processing
         
         public async Task ProcessAsync(XmlReader reader, ProcessingContext context)
         {
-            var newStyle = StyleProcessor.GetStyle(reader);
-            var style = StyleProcessor.CombineStyle(context, newStyle);
-            context.Document.CurrentTable.CurrentRow.Set(style);
+            var style = StyleProcessor.GetStyle(reader);
+            var height = Measure.Parse(reader.GetAttribute(HeightName));
+            
+            context.Document.Table.Row.Set(height, style);
 
             await context.Output.RowStartAsync(context.Document);
             await context.Flow.ProcessAsync(reader, context, _processors);

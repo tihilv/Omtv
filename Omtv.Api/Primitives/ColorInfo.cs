@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace Omtv.Api.Primitives
 {
-    public struct ColorInfo
+    public struct ColorInfo : IEquatable<ColorInfo>
     {
         public readonly Byte A;
         public readonly Byte R;
@@ -38,13 +38,51 @@ namespace Omtv.Api.Primitives
             B = b;
         }
 
+        public bool Equals(ColorInfo other)
+        {
+            return A == other.A && R == other.R && G == other.G && B == other.B;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is ColorInfo other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = A.GetHashCode();
+                hashCode = (hashCode * 397) ^ R.GetHashCode();
+                hashCode = (hashCode * 397) ^ G.GetHashCode();
+                hashCode = (hashCode * 397) ^ B.GetHashCode();
+                return hashCode;
+            }
+        }
+
+        public static bool operator ==(ColorInfo left, ColorInfo right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(ColorInfo left, ColorInfo right)
+        {
+            return !left.Equals(right);
+        }
+
         public override String ToString()
         {
             if (_nameByColors.TryGetValue(this, out var name))
                 return name;
 
+            return ToHexString();
+        }
+
+        public String ToHexString()
+        {
             if (A == 255)
                 return $"#{R:X2}{G:X2}{B:X2}";
+
             return $"#{R:X2}{G:X2}{B:X2}, op.{A:X2}";
         }
 

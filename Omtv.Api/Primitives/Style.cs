@@ -1,5 +1,4 @@
 ﻿using System;
-using Omtv.Api.Model;
 
 namespace Omtv.Api.Primitives
 {
@@ -9,14 +8,20 @@ namespace Omtv.Api.Primitives
         public ColorInfo? BackColor { get; }
         public ColorInfo? ForeColor { get; }
         public FontInfo? Font { get; }
+        public Alignment? HorizontalAlignment { get; }
+        public Alignment? VerticalAlignment { get; }
         public Border? Border { get; private set; }
+        public String[]? Parents { get; }
 
-        public Style(String? name, ColorInfo? backColor, ColorInfo? foreColor, FontInfo? font)
+        public Style(String? name, ColorInfo? backColor, ColorInfo? foreColor, FontInfo? font, Alignment? horizontalAlignment = null, Alignment? verticalAlignment = null, String[]? parents = null)
         {
             Name = name;
             BackColor = backColor;
             ForeColor = foreColor;
             Font = font;
+            HorizontalAlignment = horizontalAlignment;
+            VerticalAlignment = verticalAlignment;
+            Parents = parents;
         }
 
         internal void SetBorder(Side side, BorderSide? borderSide)
