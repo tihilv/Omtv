@@ -38,17 +38,17 @@ namespace Omtv.Api.Primitives
             B = b;
         }
 
-        public bool Equals(ColorInfo other)
+        public Boolean Equals(ColorInfo other)
         {
             return A == other.A && R == other.R && G == other.G && B == other.B;
         }
 
-        public override bool Equals(object? obj)
+        public override Boolean Equals(Object? obj)
         {
             return obj is ColorInfo other && Equals(other);
         }
 
-        public override int GetHashCode()
+        public override Int32 GetHashCode()
         {
             unchecked
             {
@@ -60,12 +60,12 @@ namespace Omtv.Api.Primitives
             }
         }
 
-        public static bool operator ==(ColorInfo left, ColorInfo right)
+        public static Boolean operator ==(ColorInfo left, ColorInfo right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(ColorInfo left, ColorInfo right)
+        public static Boolean operator !=(ColorInfo left, ColorInfo right)
         {
             return !left.Equals(right);
         }

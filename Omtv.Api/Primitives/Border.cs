@@ -35,7 +35,7 @@ namespace Omtv.Api.Primitives
                     return null;
                 }
                 
-                return _borderSides[(int)side];
+                return _borderSides[(Int32)side];
             }
         }
 
@@ -58,14 +58,14 @@ namespace Omtv.Api.Primitives
             return result;
         }
 
-        public bool Equals(Border? other)
+        public Boolean Equals(Border? other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             return _borderSides.SequenceEqual(other._borderSides);
         }
 
-        public override bool Equals(object? obj)
+        public override Boolean Equals(Object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
@@ -73,17 +73,17 @@ namespace Omtv.Api.Primitives
             return Equals((Border)obj);
         }
 
-        public override int GetHashCode()
+        public override Int32 GetHashCode()
         {
             return _borderSides.GetHashCode();
         }
 
-        public static bool operator ==(Border? left, Border? right)
+        public static Boolean operator ==(Border? left, Border? right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(Border? left, Border? right)
+        public static Boolean operator !=(Border? left, Border? right)
         {
             return !Equals(left, right);
         }

@@ -33,5 +33,21 @@ namespace Omtv.Tests
                 }
             }
         }
+
+        [Test]
+        public async Task RegularTest2()
+        {
+            using (var stream = new MemoryStream())
+            {
+                await TableVisualizer.TransformAsync(File.ReadAllText("f:\\text.txt"), new HtmlTableOutput(stream));
+
+                stream.Position = 0;
+                using (var reader = new StreamReader(stream))
+                {
+                    var output = await reader.ReadToEndAsync();
+                    await File.WriteAllTextAsync("e:\\oo.html", output);
+                }
+            }
+        }
     }
 }

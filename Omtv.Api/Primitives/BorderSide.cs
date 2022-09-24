@@ -32,17 +32,17 @@ namespace Omtv.Api.Primitives
             return new BorderSide(thickness, color);
         }
 
-        public bool Equals(BorderSide other)
+        public Boolean Equals(BorderSide other)
         {
             return Nullable.Equals(Thickness, other.Thickness) && Nullable.Equals(Color, other.Color);
         }
 
-        public override bool Equals(object? obj)
+        public override Boolean Equals(Object? obj)
         {
             return obj is BorderSide other && Equals(other);
         }
 
-        public override int GetHashCode()
+        public override Int32 GetHashCode()
         {
             unchecked
             {
@@ -50,12 +50,12 @@ namespace Omtv.Api.Primitives
             }
         }
 
-        public static bool operator ==(BorderSide left, BorderSide right)
+        public static Boolean operator ==(BorderSide left, BorderSide right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(BorderSide left, BorderSide right)
+        public static Boolean operator !=(BorderSide left, BorderSide right)
         {
             return !left.Equals(right);
         }

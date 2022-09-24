@@ -60,12 +60,13 @@ namespace Omtv.Html
                 var content = HttpUtility.HtmlEncode(document.Table.Row.Cell.Content!);
                 if (String.IsNullOrEmpty(content))
                     content = "&nbsp;";
+                content = content.Replace(Environment.NewLine, "<br>");
 
-                string colSpan = String.Empty;
+                String colSpan = String.Empty;
                 if (document.Table.Row.Cell.ColSpan > 1)
                     colSpan = $" colspan=\"{document.Table.Row.Cell.ColSpan}\"";
 
-                string rowSpan = String.Empty;
+                String rowSpan = String.Empty;
                 if (document.Table.Row.Cell.RowSpan > 1)
                     rowSpan = $" rowspan=\"{document.Table.Row.Cell.RowSpan}\"";
 
@@ -191,7 +192,7 @@ namespace Omtv.Html
             return $"{measure.Value.Value}{unit}";
         }
 
-        private String? Express(Alignment? alignment, bool vertical = false)
+        private String? Express(Alignment? alignment, Boolean vertical = false)
         {
             if (alignment == null)
                 return null;

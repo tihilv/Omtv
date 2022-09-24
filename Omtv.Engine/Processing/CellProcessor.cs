@@ -28,13 +28,21 @@ namespace Omtv.Engine.Processing
             var width = Measure.Parse(reader.GetAttribute(WidthName));
             
             await reader.ReadAsync();
-            var value = reader.Value;
+            var value = PrepareValue(reader.Value);
             
             await ProcessSpannedCellsAsync(context);
 
             context.Document.Table.Row.Cell.Set(value, width, rowSpan, colSpan, style);
             context.Document.SpanStore.Register(rowSpan, colSpan);
             await context.Output.CellAsync(context.Document);
+        }
+
+        private String? PrepareValue(String value)
+        {
+            if (String.IsNullOrEmpty(value))
+                return value;
+
+            return value.Replace("\\n", Environment.NewLine);
         }
 
         internal static async ValueTask ProcessSpannedCellsAsync(ProcessingContext context)

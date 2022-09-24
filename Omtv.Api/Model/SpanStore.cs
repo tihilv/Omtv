@@ -14,19 +14,19 @@ namespace Omtv.Api.Model
             _spannedCells = new HashSet<SpannedCell>();
         }
 
-        public bool IsSpanned()
+        public Boolean IsSpanned()
         {
             var spannedCell = new SpannedCell(_table.Row.Index, _table.Row.Cell.Index + 1); // next cell to process
             return _spannedCells.Remove(spannedCell);
         }
 
-        public void Register(byte rowSpan, byte colSpan)
+        public void Register(Byte rowSpan, Byte colSpan)
         {
             if (rowSpan > 1 || colSpan > 1)
             {
-                bool current = true;
-                for (int row = _table.Row.Index; row < _table.Row.Index + rowSpan; row++)
-                for (int column = _table.Row.Cell.Index; column < _table.Row.Cell.Index + colSpan; column++)
+                Boolean current = true;
+                for (Int32 row = _table.Row.Index; row < _table.Row.Index + rowSpan; row++)
+                for (Int32 column = _table.Row.Cell.Index; column < _table.Row.Cell.Index + colSpan; column++)
                 {
                     if (current)
                         current = false;

@@ -9,7 +9,7 @@
         <Description>Interface project for Omtv (One More Table Visualizer)</Description>
         <PackageProjectUrl>https://github.com/tihilv/Omtv</PackageProjectUrl>
         <RepositoryUrl>https://github.com/tihilv/Omtv</RepositoryUrl>
-        <Version>1.0.4</Version>
+        <Version>1.0.5</Version>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

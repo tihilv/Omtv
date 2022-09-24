@@ -11,7 +11,7 @@ namespace Omtv.Api.Primitives
 
     public static class AlignmentExtensions
     {
-        public static Alignment? Parse(string? value)
+        public static Alignment? Parse(String? value)
         {
             if (value == null)
                 return null;

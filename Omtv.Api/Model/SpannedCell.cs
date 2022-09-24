@@ -13,17 +13,17 @@ namespace Omtv.Api.Model
             Column = column;
         }
 
-        public bool Equals(SpannedCell other)
+        public Boolean Equals(SpannedCell other)
         {
             return Row == other.Row && Column == other.Column;
         }
 
-        public override bool Equals(object? obj)
+        public override Boolean Equals(Object? obj)
         {
             return obj is SpannedCell other && Equals(other);
         }
 
-        public override int GetHashCode()
+        public override Int32 GetHashCode()
         {
             unchecked
             {
@@ -31,12 +31,12 @@ namespace Omtv.Api.Model
             }
         }
 
-        public static bool operator ==(SpannedCell left, SpannedCell right)
+        public static Boolean operator ==(SpannedCell left, SpannedCell right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(SpannedCell left, SpannedCell right)
+        public static Boolean operator !=(SpannedCell left, SpannedCell right)
         {
             return !left.Equals(right);
         }

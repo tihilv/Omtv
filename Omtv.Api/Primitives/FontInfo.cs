@@ -29,17 +29,17 @@ namespace Omtv.Api.Primitives
             return null;
         }
 
-        public bool Equals(FontInfo other)
+        public Boolean Equals(FontInfo other)
         {
             return Family == other.Family && Size.Equals(other.Size);
         }
 
-        public override bool Equals(object? obj)
+        public override Boolean Equals(Object? obj)
         {
             return obj is FontInfo other && Equals(other);
         }
 
-        public override int GetHashCode()
+        public override Int32 GetHashCode()
         {
             unchecked
             {
@@ -47,12 +47,12 @@ namespace Omtv.Api.Primitives
             }
         }
 
-        public static bool operator ==(FontInfo left, FontInfo right)
+        public static Boolean operator ==(FontInfo left, FontInfo right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(FontInfo left, FontInfo right)
+        public static Boolean operator !=(FontInfo left, FontInfo right)
         {
             return !left.Equals(right);
         }

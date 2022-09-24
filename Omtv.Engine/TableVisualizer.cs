@@ -54,8 +54,8 @@ namespace Omtv.Engine
 
         public async Task ProcessAsync(XmlReader reader, ProcessingContext context, IPartProcessor[] processors)
         {
-            string elementName;
-            int depth = -1;
+            String elementName;
+            Int32 depth = -1;
             while ((depth == -1 || depth <= reader.Depth) && await reader.ReadAsync())
             {
                 if (depth == -1)
