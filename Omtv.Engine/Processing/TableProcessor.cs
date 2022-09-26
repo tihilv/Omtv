@@ -24,7 +24,11 @@ namespace Omtv.Engine.Processing
             context.Document.Table.Set(tableName, style);
 
             if (!_initialized)
+            {
+                _initialized = true;
                 await context.Output.StartAsync(context.Document);
+            }
+
             await context.Output.TableStartAsync(context.Document);
             await context.Flow.ProcessAsync(reader, context, _processors);
             await context.Output.TableEndAsync(context.Document);

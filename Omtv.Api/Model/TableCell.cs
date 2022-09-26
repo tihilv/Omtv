@@ -5,6 +5,10 @@ namespace Omtv.Api.Model
 {
     public class TableCell
     {
+        private readonly TableRow _row;
+        
+        private Boolean _isHeader;
+
         public Style? Style { get; private set; } = null!;
         public String? Content { get; private set; }
         public Byte RowSpan { get; private set; }
@@ -13,7 +17,14 @@ namespace Omtv.Api.Model
         public Boolean Spanned { get; private set; }
         public Measure? Width { get; private set; }
 
-        internal void Set(String? content, Measure? width, Byte rowSpan, Byte colSpan, Style? style)
+        public Boolean IsHeader => _isHeader || _row.IsHeader;
+
+        public TableCell(TableRow row)
+        {
+            _row = row;
+        }
+        
+        internal void Set(String? content, Measure? width, Byte rowSpan, Byte colSpan, Boolean isHeader, Style? style)
         {
             Index++;
             Width = width;
@@ -21,6 +32,7 @@ namespace Omtv.Api.Model
             Content = content;
             RowSpan = rowSpan;
             ColSpan = colSpan;
+            _isHeader = isHeader;
             Spanned = false;
         }
         
@@ -31,7 +43,7 @@ namespace Omtv.Api.Model
 
         internal void SetSpanned()
         {
-            Set(null, Measure.Null, 0, 0, Style);
+            Set(null, Measure.Null, 0, 0, false, Style);
             Spanned = true;
         }
     }

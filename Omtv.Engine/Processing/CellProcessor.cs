@@ -8,10 +8,12 @@ namespace Omtv.Engine.Processing
 {
     public class CellProcessor: IPartProcessor
     {
-        public String Name => "cell";
         private const String WidthName = "width";
-        public String RowSpanName => "rowSpan";
-        public String ColSpanName => "colSpan";
+        private const String HeaderName = "header";
+        private const String RowSpanName = "rowSpan";
+        private const String ColSpanName = "colSpan";
+
+        public String Name => "cell";
 
         public async Task ProcessAsync(XmlReader reader, ProcessingContext context)
         {
@@ -19,6 +21,7 @@ namespace Omtv.Engine.Processing
 
             var rowSpanStr = reader.GetAttribute(RowSpanName);
             var colSpanStr = reader.GetAttribute(ColSpanName);
+            var header = reader.GetAttribute(HeaderName) != null;
 
             if (!Byte.TryParse(rowSpanStr, out var rowSpan))
                 rowSpan = 1;
@@ -32,7 +35,7 @@ namespace Omtv.Engine.Processing
             
             await ProcessSpannedCellsAsync(context);
 
-            context.Document.Table.Row.Cell.Set(value, width, rowSpan, colSpan, style);
+            context.Document.Table.Row.Cell.Set(value, width, rowSpan, colSpan, header, style);
             context.Document.SpanStore.Register(rowSpan, colSpan);
             await context.Output.CellAsync(context.Document);
         }

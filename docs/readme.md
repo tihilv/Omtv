@@ -79,10 +79,11 @@ Table section contains the following properties:
 ### Row (\<row\>)
 Row section contains the following properties:
 
-| Name       | Type      | Comment                  |
-|------------|-----------|--------------------------|
-| `height`   | 'Measure' | Height of the row.       |
-| -Children- | 'Cell[]'  | Set of cells of the row. |
+| Name       | Type     | Comment                                           |
+|------------|----------|---------------------------------------------------|
+| `height`   | 'Measure' | Height of the row.                               |
+| `header`   | 'any'    | Is the row a header. Can be used for HTML format. |
+| -Children- | 'Cell[]' | Set of cells of the row.                          |
 
 ### Cell (\<cell\>)
 Row section contains the following properties:
@@ -92,9 +93,12 @@ Row section contains the following properties:
 | `width`   | 'Measure' | Width of the cell.                                    |
 | `rowSpan` | 'Integer' | Number of rows to merge including the current one.    |
 | `colSpan` | 'Integer' | Number of columns to merge including the current one. |
+| `header`   | 'any'    | Is the cell a header. Can be used for HTML format.    |
 | -Content- | 'String'  | Value of the cell.                                    |
 
 Merged by rowSpan and colSpan cells should not present in the document. 
+
+If row is a header, a cell becomes a header automatically.
 
 ### Primitives
 

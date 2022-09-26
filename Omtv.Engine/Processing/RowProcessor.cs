@@ -9,6 +9,7 @@ namespace Omtv.Engine.Processing
     public class RowProcessor: IPartProcessor
     {
         private const String HeightName = "height";
+        private const String HeaderName = "header";
         
         public String Name => "row";
 
@@ -21,8 +22,9 @@ namespace Omtv.Engine.Processing
         {
             var style = StyleProcessor.GetStyle(reader);
             var height = Measure.Parse(reader.GetAttribute(HeightName));
+            var header = reader.GetAttribute(HeaderName) != null;
             
-            context.Document.Table.Row.Set(height, style);
+            context.Document.Table.Row.Set(height, header, style);
 
             await context.Output.RowStartAsync(context.Document);
             await context.Flow.ProcessAsync(reader, context, _processors);
