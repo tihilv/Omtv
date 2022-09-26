@@ -55,6 +55,7 @@ namespace Omtv.Html
 
         public async ValueTask CellAsync(Document document)
         {
+            var tag = (document.Table.Row.Cell.IsHeader) ? "th" : "td";
             if (!document.Table.Row.Cell.Spanned)
             {
                 var content = HttpUtility.HtmlEncode(document.Table.Row.Cell.Content!);
@@ -70,7 +71,7 @@ namespace Omtv.Html
                 if (document.Table.Row.Cell.RowSpan > 1)
                     rowSpan = $" rowspan=\"{document.Table.Row.Cell.RowSpan}\"";
 
-                await _writer.WriteLineAsync($"<td{ExpressStyle(document.Table.Row.Cell.Style, additional: new Dictionary<String, String?>(){["width"] = Express(document.Table.Row.Cell.Width)})}{colSpan}{rowSpan}>{content}</td>");
+                await _writer.WriteLineAsync($"<{tag}{ExpressStyle(document.Table.Row.Cell.Style, additional: new Dictionary<String, String?>(){["width"] = Express(document.Table.Row.Cell.Width)})}{colSpan}{rowSpan}>{content}</{tag}>");
             }
         }
 
