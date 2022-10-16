@@ -19,7 +19,7 @@ namespace Omtv.Engine.Processing
             new StyleProcessor()
         };
         
-        public async Task ProcessAsync(XmlReader reader, ProcessingContext context)
+        public async ValueTask ProcessAsync(XmlReader reader, ProcessingContext context)
         {
             var documentName = reader.GetAttribute(DocumentName);
             var width = reader.GetAttribute(WidthName);

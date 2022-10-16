@@ -8,8 +8,6 @@ namespace Omtv.Engine.Processing
 {
     internal class StyleProcessor : IPartProcessor
     {
-        private const String DefaultStyleName = "default";
-        
         private const String StyleName = "name";
         private const String ParentStylesName = "styles";
         private const String BackColorName = "backColor";
@@ -25,40 +23,15 @@ namespace Omtv.Engine.Processing
         private const String BorderBottomName = "border.bottom";
         
         public String Name => "style";
-        public Task ProcessAsync(XmlReader reader, ProcessingContext context)
+        public async ValueTask ProcessAsync(XmlReader reader, ProcessingContext context)
         {
             var style = GetStyle(reader);
             if (style != null)
                 context.Document.Styles.Add(style.Name!, style);
-
-            return Task.CompletedTask;
         }
 
-        public static Style CombineStyle(ProcessingContext context, Style? newStyleToMerge, Style? parentStyle = null)
-        {
-            if (parentStyle == null)
-                parentStyle = context.Document.Styles[DefaultStyleName];
-
-            if (newStyleToMerge == null)
-                return parentStyle;
-
-            if (!String.IsNullOrEmpty(newStyleToMerge.Name))
-            {
-                if (newStyleToMerge.Name[0] == '+')
-                {
-                    var styleByName = context.Document.Styles[newStyleToMerge.Name.Substring(1)];
-                    if (parentStyle == null)
-                        parentStyle = styleByName;
-                    else
-                        parentStyle = parentStyle.MergeFrom(styleByName);
-                }
-                else
-                    parentStyle = context.Document.Styles[newStyleToMerge.Name];
-            }
-
-            return parentStyle.MergeFrom(newStyleToMerge);
-        }
-
+        
+        
         public static Style? GetStyle(XmlReader reader)
         {
             var styleName = reader.GetAttribute(StyleName);

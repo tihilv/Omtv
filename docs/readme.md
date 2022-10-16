@@ -119,6 +119,10 @@ Color can be expressed in two ways:
 - Hex form (##FFFFFF),
 - Color name (white). See [color mapping](https://learn.microsoft.com/en-us/dotnet/api/system.drawing.color).
 
+#### Font
+Font is expressed by family name and size:
+- 'Times new roman' 14
+
 #### Measure
 Measure represents a value with unit. Supported units are:
 - Percents (50%),

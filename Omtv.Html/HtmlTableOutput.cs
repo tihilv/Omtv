@@ -13,7 +13,7 @@ namespace Omtv.Html
     public class HtmlTableOutput: ITableOutput
     {
         private readonly StreamWriter _writer;
-
+        
         public HtmlTableOutput(Stream outputStream)
         {
             _writer = new StreamWriter(outputStream, Encoding.UTF8, 1024, true);
@@ -41,11 +41,14 @@ namespace Omtv.Html
             await _writer.WriteLineAsync("<body>");
         }
 
+        private Boolean[] _processedColumns;
         public async ValueTask TableStartAsync(Document document)
         {
             if (!String.IsNullOrEmpty(document.Table.Name))
                 await _writer.WriteLineAsync($"<h2>{document.Table.Name}</h2>");
             await _writer.WriteLineAsync($"<table{ExpressStyle(document.Table.Style, additional: new Dictionary<String, String?>(){["width"] = Express(document.Header.PageWidth)})}>");
+            
+            _processedColumns = new Boolean[document.Table.Columns.Count];
         }
 
         public async ValueTask RowStartAsync(Document document)
@@ -71,7 +74,15 @@ namespace Omtv.Html
                 if (document.Table.Row.Cell.RowSpan > 1)
                     rowSpan = $" rowspan=\"{document.Table.Row.Cell.RowSpan}\"";
 
-                await _writer.WriteLineAsync($"<{tag}{ExpressStyle(document.Table.Row.Cell.Style, additional: new Dictionary<String, String?>(){["width"] = Express(document.Table.Row.Cell.Width)})}{colSpan}{rowSpan}>{content}</{tag}>");
+
+                Dictionary<String, String?>? additionalProperties = null;
+                var index = document.Table.Row.Cell.Index;
+                if (_processedColumns.Length > index && !_processedColumns[index] && String.IsNullOrEmpty(colSpan))
+                {
+                    additionalProperties = new Dictionary<String, String?>(){["width"] = Express(document.Table.Columns[index].Width)};
+                    _processedColumns[index] = true;
+                }
+                await _writer.WriteLineAsync($"<{tag}{ExpressStyle(document.Table.Row.Cell.Style, additional: additionalProperties )}{colSpan}{rowSpan}>{content}</{tag}>");
             }
         }
 

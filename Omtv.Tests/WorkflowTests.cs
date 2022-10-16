@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Omtv.Engine;
@@ -72,6 +73,45 @@ namespace Omtv.Tests
                                                  "<table><row><cell>v11</cell><cell rowSpan=\"2\">v12</cell><cell>v13</cell></row><row><cell>v21</cell><cell>v23</cell></row></table></document>", output);
 
             Assert.That(output.Styles!.Count, Is.EqualTo(3));
+        }
+        
+        [Test]
+        public async Task ColumnsDefinitionInTwoBlocksExceptionTest()
+        {
+            var output = new TestTableOutput();
+            try
+            {
+                await TableVisualizer.TransformAsync("<document><header width=\"297mm\" height=\"210mm\" name=\"Some name\"><style name=\"default\" backColor=\"white\"/><style name=\"odd\" backColor=\"gray\"/></header>" +
+                                                     "<table>" +
+                                                     "<columns><column width=\"20%\"/></columns><columns><column width=\"20%\"/></columns>" +
+                                                     "<row><cell>v11</cell><cell>v12</cell></row>" +
+                                                     "</table></document>", output);
+
+                Assert.Fail();
+            }
+            catch (ConstraintException)
+            {
+                // ok
+            }
+        }
+        [Test]
+        public async Task ColumnsDefinitionAfterRowExceptionTest()
+        {
+            var output = new TestTableOutput();
+            try
+            {
+                await TableVisualizer.TransformAsync("<document><header width=\"297mm\" height=\"210mm\" name=\"Some name\"><style name=\"default\" backColor=\"white\"/><style name=\"odd\" backColor=\"gray\"/></header>" +
+                                                     "<table>" +
+                                                     "<row><cell>v11</cell><cell>v12</cell></row>" +
+                                                     "<columns><column width=\"20%\"/></columns>" +
+                                                     "</table></document>", output);
+
+                Assert.Fail();
+            }
+            catch (ConstraintException)
+            {
+                // ok
+            }
         }
     }
 }

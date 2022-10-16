@@ -29,7 +29,31 @@ namespace Omtv.Tests
                 using (var reader = new StreamReader(stream))
                 {
                     var output = await reader.ReadToEndAsync();
-                    //await File.WriteAllTextAsync("e:\\oo.html", output);
+                    await File.WriteAllTextAsync("e:\\oo.html", output);
+                }
+            }
+        }
+        
+        [Test]
+        public async Task ColumnWidthTest()
+        {
+            using (var stream = new MemoryStream())
+            {
+                await TableVisualizer.TransformAsync("<document>" +
+                                                     "<header width=\"297mm\" height=\"210mm\" name=\"Some name\">" +
+                                                     "<style name=\"default\" backColor=\"white\" foreColor=\"black\"/>" +
+                                                     "</header>" +
+                                                     "<table name=\"Table 1\" border=\"5px\" border.right=\"7px blue\">" +
+                                                     "<row><cell width=\"100px\" border=\"1px\">v11</cell><cell colSpan=\"2\" width=\"100px\" border=\"1px\">v12</cell><cell width=\"100px\" border=\"1px\">v13</cell></row>" +
+                                                     "<row><cell border=\"1px\">v21</cell><cell border=\"1px\">v22</cell><cell border=\"1px\">v23</cell><cell border=\"1px\">v24</cell></row>" +
+                                                     "</table>" +
+                                                     "</document>", new HtmlTableOutput(stream));
+
+                stream.Position = 0;
+                using (var reader = new StreamReader(stream))
+                {
+                    var output = await reader.ReadToEndAsync();
+                    await File.WriteAllTextAsync("e:\\ooo.html", output);
                 }
             }
         }

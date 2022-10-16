@@ -18,8 +18,11 @@ namespace Omtv.Engine.Processing
             new CellProcessor()
         };
         
-        public async Task ProcessAsync(XmlReader reader, ProcessingContext context)
+        public async ValueTask ProcessAsync(XmlReader reader, ProcessingContext context)
         {
+            if (context.Document.Table.Row.Index == 0)
+                await context.Output.TableStartAsync(context.Document);
+            
             var style = StyleProcessor.GetStyle(reader);
             var height = Measure.Parse(reader.GetAttribute(HeightName));
             var header = reader.GetAttribute(HeaderName) != null;

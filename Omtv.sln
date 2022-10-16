@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Omtv.Tests", "Omtv.Tests\Om
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Omtv.Html", "Omtv.Html\Omtv.Html.csproj", "{0FD286D5-5D21-4025-9C8A-F66587B64116}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Omtv.Excel", "Omtv.Excel\Omtv.Excel.csproj", "{5369A52C-30C2-470D-A4F5-9C55175E9087}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{0FD286D5-5D21-4025-9C8A-F66587B64116}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0FD286D5-5D21-4025-9C8A-F66587B64116}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FD286D5-5D21-4025-9C8A-F66587B64116}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5369A52C-30C2-470D-A4F5-9C55175E9087}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5369A52C-30C2-470D-A4F5-9C55175E9087}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5369A52C-30C2-470D-A4F5-9C55175E9087}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5369A52C-30C2-470D-A4F5-9C55175E9087}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

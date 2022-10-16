@@ -1,11 +1,13 @@
 using System;
 using Omtv.Api.Primitives;
+using Omtv.Api.Processing;
 
 namespace Omtv.Api.Model
 {
     public class TableCell
     {
-        private readonly TableRow _row;
+        private readonly Document _document;
+        private Style? _combinedStyle;
         
         private Boolean _isHeader;
 
@@ -15,19 +17,17 @@ namespace Omtv.Api.Model
         public Byte ColSpan { get; private set; }
         public Int32 Index { get; private set; }
         public Boolean Spanned { get; private set; }
-        public Measure? Width { get; private set; }
+        public Boolean IsHeader => _isHeader || _document.Table.Row.IsHeader;
 
-        public Boolean IsHeader => _isHeader || _row.IsHeader;
-
-        public TableCell(TableRow row)
+        public TableCell(Document document)
         {
-            _row = row;
+            _document = document;
         }
         
-        internal void Set(String? content, Measure? width, Byte rowSpan, Byte colSpan, Boolean isHeader, Style? style)
+        internal void Set(String? content, Byte rowSpan, Byte colSpan, Boolean isHeader, Style? style)
         {
             Index++;
-            Width = width;
+            _combinedStyle = null;
             Style = style;
             Content = content;
             RowSpan = rowSpan;
@@ -43,8 +43,18 @@ namespace Omtv.Api.Model
 
         internal void SetSpanned()
         {
-            Set(null, Measure.Null, 0, 0, false, Style);
+            Set(null, 0, 0, false, Style);
             Spanned = true;
+        }
+        
+        public Style GetCombinedStyle()
+        {
+            if (_combinedStyle == null)
+            {
+                _combinedStyle = StyleCombiner.CombineStyles(_document.Table.Row.GetCombinedStyle(), Style, _document);
+            }
+
+            return _combinedStyle;
         }
     }
 }

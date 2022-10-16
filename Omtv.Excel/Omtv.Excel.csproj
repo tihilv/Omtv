@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Omtv.Api\Omtv.Api.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Open-XML-SDK" Version="2.9.1" />
+    </ItemGroup>
+
+</Project>

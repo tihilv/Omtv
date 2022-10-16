@@ -15,7 +15,7 @@ namespace Omtv.Engine.Processing
             new TableProcessor()
         };
         
-        public async Task ProcessAsync(XmlReader reader, ProcessingContext context)
+        public async ValueTask ProcessAsync(XmlReader reader, ProcessingContext context)
         {
             await context.Flow.ProcessAsync(reader, context, _processors);
         }

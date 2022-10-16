@@ -19,7 +19,7 @@ namespace Omtv.Api.Model
         {
             Header = new Header();
             Styles = new Dictionary<String, Style>();
-            Table = new Table();
+            Table = new Table(this);
             SpanStore = new SpanStore(Table);
         }
     }
