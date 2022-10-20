@@ -13,7 +13,7 @@ namespace Omtv.Api.Processing
             if (newStyleToMerge == null)
                 return style.Unwrap(document.Styles);
 
-            return style.Unwrap(document.Styles).MergeFrom(newStyleToMerge.Unwrap(document.Styles), false);
+            return style.Unwrap(document.Styles).MergeFrom(newStyleToMerge.Unwrap(document.Styles), false, true);
         }
     }
 }

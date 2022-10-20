@@ -10,7 +10,7 @@ namespace Omtv.Excel
     {
         private Fills _fills;
 
-        private Dictionary<FillTuple, UInt32> _existingFills = new Dictionary<FillTuple, UInt32>();
+        private readonly Dictionary<FillTuple, UInt32> _existingFills = new Dictionary<FillTuple, UInt32>();
         
         private Fills PrepareDefaultFills()
         {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Omtv.Api.Primitives;
 using Alignment = Omtv.Api.Primitives.Alignment;
@@ -16,13 +15,14 @@ namespace Omtv.Excel
             return cellFormats;
         }
 
-        private UInt32 GetCellPropertiesIndex(Cell cell, Style style)
+        private UInt32 GetCellPropertiesIndex(Cell cell, Style style, UInt32 borderId, out CellFormat cellFormat)
         {
-            CellFormat cellFormat = GetCellFormat(cell);
+            cellFormat = GetCellFormat(cell);
 
             ProcessAlignment(cellFormat, style);
             cellFormat.FontId = GetFont(style);
             cellFormat.FillId = GetFill(style);
+            cellFormat.BorderId = borderId;
 
             return InsertCellFormat(cellFormat);
         }
@@ -50,16 +50,16 @@ namespace Omtv.Excel
         private CellFormat GetCellFormat(Cell cell)
         {
             if (cell.StyleIndex != null)
-                return _workbookStylesPart.Stylesheet.Elements<CellFormats>().First().Elements<CellFormat>().ElementAt((int)cell.StyleIndex.Value).CloneNode(true) as CellFormat;
+                return _workbookStylesPart.Stylesheet.Elements<CellFormats>().First().Elements<CellFormat>().ElementAt((Int32)cell.StyleIndex.Value).CloneNode(true) as CellFormat;
 
             return new CellFormat();
         }
 
-        public uint InsertCellFormat(CellFormat cellFormat)
+        public UInt32 InsertCellFormat(CellFormat cellFormat)
         {
             CellFormats cellFormats = _workbookStylesPart.Stylesheet.Elements<CellFormats>().First();
             cellFormats.Append(cellFormat);
-            return (uint)cellFormats.Count++;
+            return (UInt32)cellFormats.Count++;
         }
 
         private static VerticalAlignmentValues? GetVerticalAlignment(Style style)

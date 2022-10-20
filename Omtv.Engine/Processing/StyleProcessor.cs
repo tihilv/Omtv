@@ -22,6 +22,13 @@ namespace Omtv.Engine.Processing
         private const String BorderTopName = "border.top";
         private const String BorderBottomName = "border.bottom";
         
+        private const String MarginAllName = "margin.left";
+        private const String MarginLeftName = "margin.left";
+        private const String MarginRightName = "margin.right";
+        private const String MarginTopName = "margin.top";
+        private const String MarginBottomName = "margin.bottom";
+
+        
         public String Name => "style";
         public async ValueTask ProcessAsync(XmlReader reader, ProcessingContext context)
         {
@@ -30,8 +37,6 @@ namespace Omtv.Engine.Processing
                 context.Document.Styles.Add(style.Name!, style);
         }
 
-        
-        
         public static Style? GetStyle(XmlReader reader)
         {
             var styleName = reader.GetAttribute(StyleName);
@@ -58,6 +63,28 @@ namespace Omtv.Engine.Processing
                 style.SetBorder(Side.Top, BorderSide.Parse(borderTop));
                 style.SetBorder(Side.Bottom, BorderSide.Parse(borderBottom));
                 return style;
+            }
+
+            return null;
+        }
+
+        public static Margin? GetMargin(XmlReader reader)
+        {
+            var marginAll = reader.GetAttribute(MarginAllName);
+            var marginLeft = reader.GetAttribute(MarginLeftName);
+            var marginRight = reader.GetAttribute(MarginRightName);
+            var marginTop = reader.GetAttribute(MarginTopName);
+            var marginBottom = reader.GetAttribute(MarginBottomName);
+
+            if (marginAll != null || marginLeft != null || marginRight != null || marginTop != null || marginBottom != null)
+            {
+                var margin = new Margin();
+                margin.SetSide(Side.All, Measure.Parse(marginAll));
+                margin.SetSide(Side.Left, Measure.Parse(marginLeft));
+                margin.SetSide(Side.Right, Measure.Parse(marginRight));
+                margin.SetSide(Side.Top, Measure.Parse(marginTop));
+                margin.SetSide(Side.Bottom, Measure.Parse(marginBottom));
+                return margin;
             }
 
             return null;

@@ -30,6 +30,7 @@ namespace Omtv.Html
                 await _writer.WriteLineAsync($"<title>{document.Header.DocumentName}</title>");
 
             await _writer.WriteLineAsync("<style>");
+            await _writer.WriteLineAsync($"@page {{ size: {Express(document.Header.PageWidth)} {Express(document.Header.PageHeight)};{Express(document.Header.Margin)}}}");
             await _writer.WriteLineAsync("table { border-spacing: 0; }");
             await _writer.WriteLineAsync("tr { border-spacing: 0; }");
             await _writer.WriteLineAsync("td { border-spacing: 0; }");
@@ -232,6 +233,25 @@ namespace Omtv.Html
                 default:
                     throw new ArgumentOutOfRangeException(nameof(alignment), alignment, null);
             }
+        }
+        
+        private String Express(Margin? margin)
+        {
+            if (margin == null)
+                return String.Empty;
+
+            var sb = new StringBuilder();
+
+            if (margin[Side.Left] != null)
+                sb.Append($" margin-left: {Express(margin[Side.Left])};");
+            if (margin[Side.Right] != null)
+                sb.Append($" margin-right: {Express(margin[Side.Right])};");
+            if (margin[Side.Top] != null)
+                sb.Append($" margin-top: {Express(margin[Side.Top])};");
+            if (margin[Side.Bottom] != null)
+                sb.Append($" margin-bottom: {Express(margin[Side.Bottom])};");
+            
+            return sb.ToString();
         }
     }
 }

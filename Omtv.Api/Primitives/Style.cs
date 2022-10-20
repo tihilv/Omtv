@@ -39,7 +39,7 @@ namespace Omtv.Api.Primitives
             }
         }
 
-        public Style MergeFrom(Style newStyleToMerge, Boolean preserveParents)
+        public Style MergeFrom(Style newStyleToMerge, Boolean preserveParents, Boolean overwriteBorder)
         {
             var result = new Style(null,
                 newStyleToMerge.BackColor ?? BackColor,
@@ -50,7 +50,7 @@ namespace Omtv.Api.Primitives
                 preserveParents ? ((newStyleToMerge.Parents ?? Array.Empty<String>()).Union(Parents ?? Array.Empty<String>()).Distinct().ToArray()) : null
             );
             
-            if (Border == null)
+            if (Border == null || overwriteBorder)
                 result.Border = newStyleToMerge.Border;
             else if (newStyleToMerge.Border == null)
                 result.Border = Border;
@@ -71,14 +71,14 @@ namespace Omtv.Api.Primitives
                         if (result == null)
                             result = parent;
                         else
-                            result = result.MergeFrom(parent, false);
+                            result = result.MergeFrom(parent, false, false);
                     }
                 }
 
             if (result == null)
                 result = this;
             else
-                result = result.MergeFrom(this, false);
+                result = result.MergeFrom(this, false, false);
 
             return result;
         }

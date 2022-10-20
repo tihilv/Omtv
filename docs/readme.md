@@ -36,7 +36,7 @@ A document has a header that expresses default document parameters and list of c
     </header>
 
     <table name="Table 1" border="5px" border.right="7px blue">
-        <row styles="odd" height="25px"><cell align="center" width="70%" parents="borders">v11</cell><cell rowSpan="2" valign="after" width="20px">v12</cell><cell>v13</cell></row>
+        <row styles="odd" height="25px"><cell align="center" width="70%" styles="borders">v11</cell><cell rowSpan="2" valign="after" width="20px">v12</cell><cell>v13</cell></row>
         <row><cell align="center">v21</cell><cell>v23</cell></row>
     </table>
 </document>
@@ -45,12 +45,13 @@ A document has a header that expresses default document parameters and list of c
 ### Header (\<header\>)
 Header section contains the following properties:
 
-| Name       | Type      | Comment                                                                         |
-|------------|-----------|---------------------------------------------------------------------------------|
-| `name`     | 'String'  | Name of the document. Can be used, for example, as a name of the HTML document. |
-| `width`    | 'Measure' | Width of the document page.                                                     |
-| `height`   | 'Measure' | Height of the document page.                                                    |
-| -Children- | 'Style[]' | Set of predefined styles of the document.                                       |
+| Name       | Type      | Comment                                                                                                                  |
+|------------|-----------|--------------------------------------------------------------------------------------------------------------------------|
+| `name`     | 'String'  | Name of the document. Can be used, for example, as a name of the HTML document.                                          |
+| `width`    | 'Measure' | Width of the document page.                                                                                              |
+| `height`   | 'Measure' | Height of the document page.                                                                                             |
+| `margin`   | 'Measure' | Margin of the document page. It's possible to set/override borders partially:<br/>'margin.[left / right / top / bottom]' |
+| -Children- | 'Style[]' | Set of predefined styles of the document.                                                                                |
 
 ### Style (\<style\>)
 A style can be expressed in two forms: as a separate element of the header, or as a property set of a table, row or cell (embedded style).

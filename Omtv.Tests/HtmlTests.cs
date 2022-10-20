@@ -14,7 +14,7 @@ namespace Omtv.Tests
             using (var stream = new MemoryStream())
             {
                 await TableVisualizer.TransformAsync("<document>" +
-                                                     "<header width=\"297mm\" height=\"210mm\" name=\"Some name\">" +
+                                                     "<header width=\"297mm\" height=\"210mm\" margin.left=\"30mm\" name=\"Some name\">" +
                                                      "<style name=\"default\" backColor=\"white\" foreColor=\"black\"/>" +
                                                      "<style name=\"odd\" backColor=\"gray\"/>" +
                                                      "<style name=\"borders\" border=\"2px\"/>" +

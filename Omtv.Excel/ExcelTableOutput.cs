@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using Omtv.Api.Primitives;
 using Omtv.Api.Processing;
 using Document = Omtv.Api.Model.Document;
 
@@ -27,13 +28,16 @@ namespace Omtv.Excel
 
         private Sheet _sheet;
         private Row _row;
-       
+
+        private readonly List<(CellFormat, Style)> _lastRowCellFormats;
+        
         public ExcelTableOutput(Stream stream)
         {
             _stream = stream;
 
             _texts = new Dictionary<String, Int32>();
             _mergeReferences = new List<String>();
+            _lastRowCellFormats = new List<(CellFormat, Style)>();
         }
 
         public async ValueTask StartAsync(Document document)
@@ -77,7 +81,7 @@ namespace Omtv.Excel
                         Column excelColumn = new Column();
                         excelColumn.Min = (UInt32)(index);
                         excelColumn.Max = (UInt32)(index);
-                        excelColumn.Width = GetExcelWidth(column.Width.Value, document.Header.PageWidth);
+                        excelColumn.Width = GetExcelWidth(column.Width.Value, document.Header.ContentWidth);
                         excelColumn.CustomWidth = true;
                         columns.Append(excelColumn);
                     }
@@ -90,10 +94,11 @@ namespace Omtv.Excel
 
         public async ValueTask RowStartAsync(Document document)
         {
+            _lastRowCellFormats.Clear();
             _row = new Row() { RowIndex = (UInt32)document.Table.Row.Index };
             if (document.Table.Row.Height != null)
             {
-                _row.Height = GetExcelHeight(document.Table.Row.Height.Value, document.Header.PageHeight);
+                _row.Height = GetExcelHeight(document.Table.Row.Height.Value, document.Header.ContentHeight);
                 _row.CustomHeight = true;
             }
 
@@ -113,7 +118,9 @@ namespace Omtv.Excel
                 newCell.DataType = new EnumValue<CellValues>(CellValues.SharedString);
                 
                 var style = document.Table.Row.Cell.GetCombinedStyle();
-                newCell.StyleIndex = GetCellPropertiesIndex(newCell, style);
+                var borderId = GetBorders(document.Table.GetCombinedStyle(), style, cell.Index == 1, isTop: row.Index == 1);
+                newCell.StyleIndex = GetCellPropertiesIndex(newCell, style, borderId, out var cellFormat);
+                _lastRowCellFormats.Add((cellFormat, style));
 
                 if (cell.RowSpan > 1 || cell.ColSpan > 1)
                     _mergeReferences.Add(newCell.CellReference.Value + ":" + GetCellReference(row.Index + row.Cell.RowSpan - 1, row.Cell.Index + row.Cell.ColSpan - 1));
@@ -131,13 +138,13 @@ namespace Omtv.Excel
             return index;
         }
 
-        private string GetCellReference(Int32 row, Int32 column)
+        private String GetCellReference(Int32 row, Int32 column)
         {
             column = column - 1;
             var letterCount = 'Z' - 'A' + 1;
-            var columnName = ((char)('A' + (byte)(column%letterCount))).ToString();
+            var columnName = ((Char)('A' + (Byte)(column%letterCount))).ToString();
             if (column >=letterCount)
-                columnName = ((char)('A' + (byte)(column/letterCount)-1)).ToString() + columnName;
+                columnName = ((Char)('A' + (Byte)(column/letterCount)-1)).ToString() + columnName;
             
             return columnName + row;
         }
@@ -152,11 +159,23 @@ namespace Omtv.Excel
         
         public async ValueTask RowEndAsync(Document document)
         {
-            
+            var lastCellFormat = _lastRowCellFormats.LastOrDefault();
+            if (lastCellFormat.Item1 != null)
+            {
+                lastCellFormat.Item1.BorderId = GetBorders(document.Table.GetCombinedStyle(), lastCellFormat.Item2,
+                    _lastRowCellFormats.Count == 1, isTop: document.Table.Row.Index == 1, isRight: true);
+            }
         }
 
         public async ValueTask TableEndAsync(Document document)
         {
+            for (var i = 0; i < _lastRowCellFormats.Count; i++)
+            {
+                var pair = _lastRowCellFormats[i];
+                pair.Item1.BorderId = GetBorders(document.Table.GetCombinedStyle(), pair.Item2,
+                    i == 0, isTop: document.Table.Row.Index == 1, isRight: i == _lastRowCellFormats.Count-1, isBottom: true);
+            }
+
             MergeCellsIfNeeded();
             _worksheetPart.Worksheet.Save();
         }

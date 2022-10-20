@@ -10,7 +10,7 @@ namespace Omtv.Excel
     {
         private Fonts _fonts;
 
-        private Dictionary<FontTuple, UInt32> _existingFonts = new Dictionary<FontTuple, UInt32>();
+        private readonly Dictionary<FontTuple, UInt32> _existingFonts = new Dictionary<FontTuple, UInt32>();
 
         private Fonts PrepareDefaultFonts()
         {
