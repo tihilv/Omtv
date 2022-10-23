@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Omtv.Engine;
+using Omtv.Excel;
 using Omtv.Html;
 
 namespace Omtv.Tests
@@ -29,7 +30,9 @@ namespace Omtv.Tests
                 using (var reader = new StreamReader(stream))
                 {
                     var output = await reader.ReadToEndAsync();
+#if DEBUG
                     await File.WriteAllTextAsync("e:\\oo.html", output);
+#endif
                 }
             }
         }
@@ -53,26 +56,35 @@ namespace Omtv.Tests
                 using (var reader = new StreamReader(stream))
                 {
                     var output = await reader.ReadToEndAsync();
+#if DEBUG
                     await File.WriteAllTextAsync("e:\\ooo.html", output);
+#endif
                 }
             }
         }
-/*
+
         [Test]
-        public async Task RegularTest2()
+        public async Task RealTest()
         {
             using (var stream = new MemoryStream())
             {
-                await TableVisualizer.TransformAsync(File.ReadAllText("f:\\text.txt"), new HtmlTableOutput(stream));
+                await TableVisualizer.TransformAsync(File.ReadAllText("e:\\res2.qqq"), new ExcelTableOutput(stream));
 
                 stream.Position = 0;
-                using (var reader = new StreamReader(stream))
-                {
-                    var output = await reader.ReadToEndAsync();
-                    //await File.WriteAllTextAsync("e:\\oo.html", output);
-                }
+#if DEBUG
+                await File.WriteAllBytesAsync("e:\\oo.xlsx", stream.ToArray());
+#endif
+            }
+            
+            using (var stream = new MemoryStream())
+            {
+                await TableVisualizer.TransformAsync(File.ReadAllText("e:\\res2.qqq"), new HtmlTableOutput(stream));
+
+                stream.Position = 0;
+#if DEBUG
+                await File.WriteAllBytesAsync("e:\\oo.html", stream.ToArray());
+#endif
             }
         }
-*/
     }
 }

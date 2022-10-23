@@ -17,7 +17,8 @@ await TableVisualizer.TransformAsync(inputStream, output);
 
 At the current moment the following outputs are implemented:
 - `CsvTableOutput`,
-- `HtmlTableOutput`.
+- `HtmlTableOutput`,
+- `ExcelTableOutput`.
 
 Under development are the outputs for:
 - PDF,

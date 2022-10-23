@@ -60,9 +60,14 @@ namespace Omtv.Excel
         public async ValueTask TableStartAsync(Document document)
         {
             _worksheetPart = _workbookPart.AddNewPart<WorksheetPart>();
-            _worksheetPart.Worksheet = new Worksheet(new Columns(), new SheetData());
 
-            _sheet = new Sheet() { Id = _spreadsheetDocument.WorkbookPart.GetIdOfPart(_worksheetPart), SheetId = (UInt32)document.Table.Index, Name = document.Table.Name };
+            _worksheetPart.Worksheet = new Worksheet(new Columns(), new SheetData(), GetPageMargins(document.Header.Margin), GetPageSetup(document));
+
+            var name = document.Table.Name;
+            if (String.IsNullOrEmpty(name))
+                name = $"Table {document.Table.Index}";
+            
+            _sheet = new Sheet() { Id = _spreadsheetDocument.WorkbookPart.GetIdOfPart(_worksheetPart), SheetId = (UInt32)document.Table.Index, Name = name };
             _sheets.Append(_sheet);
 
             SetupColumns(document);
@@ -73,18 +78,49 @@ namespace Omtv.Excel
             var columns = _worksheetPart.Worksheet.GetFirstChild<Columns>();
             if (document.Table.Columns.Any())
             {
+                var newColumnWidths = new Double?[document.Table.Columns.Count];
+                double fixedSizeInInch = 0;
+                double percentSize = 0;
+                int undefinedWidthColumnCount = 0;
+                
                 for (var index = 0; index < document.Table.Columns.Count; index++)
                 {
                     var column = document.Table.Columns[index];
                     if (column.Width != null)
                     {
-                        Column excelColumn = new Column();
-                        excelColumn.Min = (UInt32)(index);
-                        excelColumn.Max = (UInt32)(index);
-                        excelColumn.Width = GetExcelWidth(column.Width.Value, document.Header.ContentWidth);
-                        excelColumn.CustomWidth = true;
-                        columns.Append(excelColumn);
+                        if (column.Width.Value.Unit == Unit.Percent)
+                            percentSize += column.Width.Value.Value;
+                        else
+                        {
+                            var sizeInInch = GetExcelWidthInInch(column.Width.Value, document.Header.ContentWidth);
+                            fixedSizeInInch += sizeInInch;
+                            newColumnWidths[index] = sizeInInch;
+                        }
                     }
+                    else
+                        undefinedWidthColumnCount++;
+                }
+
+                var freeWidthInInch = GetExcelWidthInInch(document.Header.ContentWidth, document.Header.ContentWidth) - fixedSizeInInch;
+                var freePercentPerUndefinedColumn = Math.Round((100 - Math.Min(percentSize, 100)) / undefinedWidthColumnCount,2);
+                for (var index = 0; index < document.Table.Columns.Count; index++)
+                {
+                    var column = document.Table.Columns[index];
+                    var width = newColumnWidths[index];
+                    if (width == null)
+                    {
+                        if (column?.Width?.Unit == Unit.Percent)
+                            width = freeWidthInInch * column.Width.Value.Value / 100;
+                        else
+                            width = freeWidthInInch * freePercentPerUndefinedColumn / 100;
+                    }
+
+                    Column excelColumn = new Column();
+                    excelColumn.Min = (UInt32)(index + 1);
+                    excelColumn.Max = (UInt32)(index + 1);
+                    excelColumn.Width = width;
+                    excelColumn.CustomWidth = true;
+                    columns.Append(excelColumn);
                 }
             }
 
@@ -119,7 +155,7 @@ namespace Omtv.Excel
                 
                 var style = document.Table.Row.Cell.GetCombinedStyle();
                 var borderId = GetBorders(document.Table.GetCombinedStyle(), style, cell.Index == 1, isTop: row.Index == 1);
-                newCell.StyleIndex = GetCellPropertiesIndex(newCell, style, borderId, out var cellFormat);
+                newCell.StyleIndex = GetCellPropertiesIndex(newCell, style, borderId, cell.Content.Contains(Environment.NewLine), out var cellFormat);
                 _lastRowCellFormats.Add((cellFormat, style));
 
                 if (cell.RowSpan > 1 || cell.ColSpan > 1)
@@ -182,6 +218,9 @@ namespace Omtv.Excel
         
         private void MergeCellsIfNeeded()
         {
+            if (!_mergeReferences.Any())
+                return;
+            
             var worksheet = _worksheetPart.Worksheet;
             MergeCells mergeCells;
             if (worksheet.Elements<MergeCells>().Any())

@@ -15,11 +15,11 @@ namespace Omtv.Excel
             return cellFormats;
         }
 
-        private UInt32 GetCellPropertiesIndex(Cell cell, Style style, UInt32 borderId, out CellFormat cellFormat)
+        private UInt32 GetCellPropertiesIndex(Cell cell, Style style, UInt32 borderId, Boolean wrapText, out CellFormat cellFormat)
         {
             cellFormat = GetCellFormat(cell);
 
-            ProcessAlignment(cellFormat, style);
+            ProcessAlignment(cellFormat, style, wrapText);
             cellFormat.FontId = GetFont(style);
             cellFormat.FillId = GetFill(style);
             cellFormat.BorderId = borderId;
@@ -27,12 +27,12 @@ namespace Omtv.Excel
             return InsertCellFormat(cellFormat);
         }
 
-        private static void ProcessAlignment(CellFormat cellFormat, Style style)
+        private static void ProcessAlignment(CellFormat cellFormat, Style style, Boolean wrapText)
         {
             var hor = GetHorizontalAlignment(style);
             var ver = GetVerticalAlignment(style);
 
-            if (hor != null || ver != null)
+            if (hor != null || ver != null || wrapText)
             {
                 var alignment = new DocumentFormat.OpenXml.Spreadsheet.Alignment();
 
@@ -42,6 +42,9 @@ namespace Omtv.Excel
                 if (ver != null)
                     alignment.Vertical = ver;
 
+                if (wrapText)
+                    alignment.WrapText = true;
+                
                 cellFormat.Append(alignment);
                 cellFormat.ApplyAlignment = true;
             }
@@ -113,7 +116,7 @@ namespace Omtv.Excel
             }
         }
 
-        private Double GetExcelWidth(Measure value, Measure pageSize)
+        private Double GetExcelWidthInInch(Measure value, Measure pageSize)
         {
             switch (value.Unit)
             {
@@ -124,7 +127,7 @@ namespace Omtv.Excel
                 case Unit.Percent:
                     return GetExcelHeight(new Measure(pageSize.Value * value.Value / 100.0, pageSize.Unit), pageSize);
                 case Unit.Mm:
-                    return value.Value / 2.54*1.29;
+                    return (value.Value-1.0)/2.0 + 0.54296875;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

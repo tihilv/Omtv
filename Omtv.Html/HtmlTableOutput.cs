@@ -77,7 +77,7 @@ namespace Omtv.Html
 
 
                 Dictionary<String, String?>? additionalProperties = null;
-                var index = document.Table.Row.Cell.Index;
+                var index = document.Table.Row.Cell.Index-1;
                 if (_processedColumns.Length > index && !_processedColumns[index] && String.IsNullOrEmpty(colSpan))
                 {
                     additionalProperties = new Dictionary<String, String?>(){["width"] = Express(document.Table.Columns[index].Width)};

@@ -41,3 +41,8 @@ jobs:
       with:
           PROJECT_FILE_PATH: Omtv.Html/Omtv.Html.csproj
           NUGET_KEY: ${{secrets.NUGET_TOKEN}}
+    - name: Publish Omtv.Excel
+      uses: alirezanet/publish-nuget@v3.0.4
+      with:
+          PROJECT_FILE_PATH: Omtv.Excel/Omtv.Excel.csproj
+          NUGET_KEY: ${{secrets.NUGET_TOKEN}}

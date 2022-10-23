@@ -79,11 +79,25 @@ namespace Omtv.Engine.Processing
             if (marginAll != null || marginLeft != null || marginRight != null || marginTop != null || marginBottom != null)
             {
                 var margin = new Margin();
-                margin.SetSide(Side.All, Measure.Parse(marginAll));
-                margin.SetSide(Side.Left, Measure.Parse(marginLeft));
-                margin.SetSide(Side.Right, Measure.Parse(marginRight));
-                margin.SetSide(Side.Top, Measure.Parse(marginTop));
-                margin.SetSide(Side.Bottom, Measure.Parse(marginBottom));
+                var side = Measure.Parse(marginAll);
+                if (side != null)
+                    margin.SetSide(Side.All, side.Value);
+                
+                side = Measure.Parse(marginLeft);
+                if (side != null)
+                    margin.SetSide(Side.Left, side.Value);
+                
+                side = Measure.Parse(marginRight);
+                if (side != null)
+                    margin.SetSide(Side.Right, side.Value);
+                
+                side = Measure.Parse(marginTop);
+                if (side != null)
+                    margin.SetSide(Side.Top, side.Value);
+                
+                side = Measure.Parse(marginBottom);
+                if (side != null)
+                    margin.SetSide(Side.Bottom, side.Value);
                 return margin;
             }
 

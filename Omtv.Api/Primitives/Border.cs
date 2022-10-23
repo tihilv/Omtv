@@ -15,8 +15,11 @@ namespace Omtv.Api.Primitives
         }
     }
 
-    public class Margin: SideDriven<Measure?>
+    public class Margin: SideDriven<Measure>
     {
-        
+        public Margin()
+        {
+            SetSide(Side.All, new Measure(15, Unit.Mm));
+        }
     }
 }
