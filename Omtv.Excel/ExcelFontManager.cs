@@ -6,20 +6,21 @@ using Omtv.Api.Primitives;
 
 namespace Omtv.Excel
 {
-    public partial class ExcelTableOutput
+    internal class ExcelFontManager
     {
-        private Fonts _fonts;
+        private readonly Fonts _fonts;
 
         private readonly Dictionary<FontTuple, UInt32> _existingFonts = new Dictionary<FontTuple, UInt32>();
 
-        private Fonts PrepareDefaultFonts()
+        public Fonts Fonts => _fonts;
+
+        internal ExcelFontManager()
         {
             _fonts = new Fonts() { Count = 0 };
             GetFont(null);
-            return _fonts;
         }
         
-        private UInt32 GetFont(Style? style)
+        internal UInt32 GetFont(Style? style)
         {
             var fontTuple = new FontTuple(style);
             if (_existingFonts.TryGetValue(fontTuple, out var result))

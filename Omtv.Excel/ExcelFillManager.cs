@@ -6,21 +6,22 @@ using Omtv.Api.Primitives;
 
 namespace Omtv.Excel
 {
-    public partial class ExcelTableOutput
+    internal class ExcelFillManager
     {
-        private Fills _fills;
+        private readonly Fills _fills;
 
         private readonly Dictionary<FillTuple, UInt32> _existingFills = new Dictionary<FillTuple, UInt32>();
-        
-        private Fills PrepareDefaultFills()
+
+        public Fills Fills => _fills;
+
+        internal ExcelFillManager()
         {
             _fills = new Fills() { Count = 0 };
             GetFill(null, PatternValues.None);
             GetFill(null, PatternValues.Gray125);
-            return _fills;
         }
         
-        private UInt32 GetFill(Style? style, PatternValues defaultPattern = PatternValues.None)
+        internal UInt32 GetFill(Style? style, PatternValues defaultPattern = PatternValues.None)
         {
             var fillTuple = new FillTuple(style, defaultPattern);
             if (_existingFills.TryGetValue(fillTuple, out var result))

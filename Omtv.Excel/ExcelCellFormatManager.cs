@@ -6,22 +6,27 @@ using Alignment = Omtv.Api.Primitives.Alignment;
 
 namespace Omtv.Excel
 {
-    public partial class ExcelTableOutput
+    internal class ExcelCellFormatManager
     {
-        private CellFormats PrepareDefaultCellFormats()
+        private readonly ExcelStylesheetManager _stylesheetManager;
+        private readonly CellFormats _cellFormats;
+
+        public CellFormats CellFormats => _cellFormats;
+
+        internal ExcelCellFormatManager(ExcelStylesheetManager stylesheetManager)
         {
-            var cellFormats = new CellFormats() { Count = 1 };
-            cellFormats.Append(new CellFormat() { NumberFormatId = 0U, FontId = 0U, FillId = 0U, BorderId = 0U, FormatId = 0U });
-            return cellFormats;
+            _stylesheetManager = stylesheetManager;
+            _cellFormats = new CellFormats() { Count = 1 };
+            _cellFormats.Append(new CellFormat() { NumberFormatId = 0U, FontId = 0U, FillId = 0U, BorderId = 0U, FormatId = 0U });
         }
 
-        private UInt32 GetCellPropertiesIndex(Cell cell, Style style, UInt32 borderId, Boolean wrapText, out CellFormat cellFormat)
+        internal UInt32 GetCellPropertiesIndex(Cell cell, Style style, UInt32 borderId, Boolean wrapText, out CellFormat cellFormat)
         {
             cellFormat = GetCellFormat(cell);
 
             ProcessAlignment(cellFormat, style, wrapText);
-            cellFormat.FontId = GetFont(style);
-            cellFormat.FillId = GetFill(style);
+            cellFormat.FontId = _stylesheetManager.FontManager.GetFont(style);
+            cellFormat.FillId = _stylesheetManager.FillManager.GetFill(style);
             cellFormat.BorderId = borderId;
 
             return InsertCellFormat(cellFormat);
@@ -53,14 +58,14 @@ namespace Omtv.Excel
         private CellFormat GetCellFormat(Cell cell)
         {
             if (cell.StyleIndex != null)
-                return _workbookStylesPart.Stylesheet.Elements<CellFormats>().First().Elements<CellFormat>().ElementAt((Int32)cell.StyleIndex.Value).CloneNode(true) as CellFormat;
+                return (CellFormat)_stylesheetManager.Stylesheet.Elements<CellFormats>().First().Elements<CellFormat>().ElementAt((Int32)cell.StyleIndex.Value).CloneNode(true);
 
             return new CellFormat();
         }
 
         public UInt32 InsertCellFormat(CellFormat cellFormat)
         {
-            CellFormats cellFormats = _workbookStylesPart.Stylesheet.Elements<CellFormats>().First();
+            CellFormats cellFormats = _stylesheetManager.Stylesheet.Elements<CellFormats>().First();
             cellFormats.Append(cellFormat);
             return (UInt32)cellFormats.Count++;
         }
@@ -99,38 +104,6 @@ namespace Omtv.Excel
             }
         }
 
-        private Double GetExcelHeight(Measure value, Measure pageSize)
-        {
-            switch (value.Unit)
-            {
-                case Unit.Pixel:
-                    return value.Value / 4.0 * 3;
-                case Unit.Em:
-                    return value.Value;
-                case Unit.Percent:
-                    return GetExcelHeight(new Measure(pageSize.Value * value.Value / 100.0, pageSize.Unit), pageSize);
-                case Unit.Mm:
-                    return value.Value / 0.176378 / 4.0 * 3;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
-        private Double GetExcelWidthInInch(Measure value, Measure pageSize)
-        {
-            switch (value.Unit)
-            {
-                case Unit.Pixel:
-                    return (value.Value * 0.0909 - 0.63)*1.03;
-                case Unit.Em:
-                    return value.Value;
-                case Unit.Percent:
-                    return GetExcelHeight(new Measure(pageSize.Value * value.Value / 100.0, pageSize.Unit), pageSize);
-                case Unit.Mm:
-                    return (value.Value-1.0)/2.0 + 0.54296875;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
+        
     }
 }

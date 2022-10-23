@@ -7,6 +7,7 @@ using System.Web;
 using Omtv.Api.Model;
 using Omtv.Api.Primitives;
 using Omtv.Api.Processing;
+using Omtv.Api.Utils;
 
 namespace Omtv.Html
 {
@@ -42,6 +43,7 @@ namespace Omtv.Html
             await _writer.WriteLineAsync("<body>");
         }
 
+        private ColumnWidthProcessor _columnProcessor;
         private Boolean[] _processedColumns;
         public async ValueTask TableStartAsync(Document document)
         {
@@ -50,6 +52,8 @@ namespace Omtv.Html
             await _writer.WriteLineAsync($"<table{ExpressStyle(document.Table.Style, additional: new Dictionary<String, String?>(){["width"] = Express(document.Header.PageWidth)})}>");
             
             _processedColumns = new Boolean[document.Table.Columns.Count];
+            
+            _columnProcessor = new ColumnWidthProcessor(document, measure => ExpressWidth(measure, document.Header.ContentWidth));
         }
 
         public async ValueTask RowStartAsync(Document document)
@@ -80,7 +84,7 @@ namespace Omtv.Html
                 var index = document.Table.Row.Cell.Index-1;
                 if (_processedColumns.Length > index && !_processedColumns[index] && String.IsNullOrEmpty(colSpan))
                 {
-                    additionalProperties = new Dictionary<String, String?>(){["width"] = Express(document.Table.Columns[index].Width)};
+                    additionalProperties = new Dictionary<String, String?>() { ["width"] = Express(new Measure(_columnProcessor.ColumnWidths[index], document.Header.ContentWidth.Unit)) };
                     _processedColumns[index] = true;
                 }
                 await _writer.WriteLineAsync($"<{tag}{ExpressStyle(document.Table.Row.Cell.Style, additional: additionalProperties )}{colSpan}{rowSpan}>{content}</{tag}>");
@@ -175,6 +179,23 @@ namespace Omtv.Html
                 var thickness = borderSide.Value.Thickness ?? Measure.Null;
                 var color = borderSide.Value.Color ?? style.ForeColor;
                 return $"{Express(thickness)} {color?.ToHexString()} solid";
+            }
+        }
+
+        private Double ExpressWidth(Measure measure, Measure pageWidth)
+        {
+            switch (measure.Unit)
+            {
+                case Unit.Pixel:
+                    return measure.Value;
+                case Unit.Em:
+                    return measure.Value;
+                case Unit.Percent:
+                    return ExpressWidth(new Measure(pageWidth.Value * measure.Value / 100.0, pageWidth.Unit), pageWidth);
+                case Unit.Mm:
+                    return measure.Value;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 

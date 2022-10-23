@@ -9,7 +9,7 @@
         <Description>Excel visualizer for Omtv (One More Table Visualizer)</Description>
         <PackageProjectUrl>https://github.com/tihilv/Omtv</PackageProjectUrl>
         <RepositoryUrl>https://github.com/tihilv/Omtv</RepositoryUrl>
-        <Version>1.0.8</Version>
+        <Version>1.0.9</Version>
     </PropertyGroup>
 
     <ItemGroup>
