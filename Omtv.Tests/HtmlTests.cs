@@ -62,7 +62,7 @@ namespace Omtv.Tests
                 }
             }
         }
-
+#if DEBUG
         [Test]
         public async Task RealTest()
         {
@@ -71,9 +71,8 @@ namespace Omtv.Tests
                 await TableVisualizer.TransformAsync(File.ReadAllText("e:\\res2.qqq"), new ExcelTableOutput(stream));
 
                 stream.Position = 0;
-#if DEBUG
+
                 await File.WriteAllBytesAsync("e:\\oo.xlsx", stream.ToArray());
-#endif
             }
             
             using (var stream = new MemoryStream())
@@ -81,10 +80,9 @@ namespace Omtv.Tests
                 await TableVisualizer.TransformAsync(File.ReadAllText("e:\\res2.qqq"), new HtmlTableOutput(stream));
 
                 stream.Position = 0;
-#if DEBUG
                 await File.WriteAllBytesAsync("e:\\oo.html", stream.ToArray());
-#endif
             }
         }
+#endif
     }
 }
