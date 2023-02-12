@@ -36,18 +36,4 @@ public class PdfTests
 #endif
         }
     }
-    
-    [Test]
-    public async Task FileTest()
-    {
-        using (var stream = new MemoryStream())
-        {
-            var doc = File.ReadAllText("e:\\1.txt");
-
-            await TableVisualizer.TransformAsync(doc, new PdfTableOutput(stream));
-#if DEBUG
-            await File.WriteAllBytesAsync("e:\\oo.pdf", stream.ToArray());
-#endif
-        }
-    }
 }
