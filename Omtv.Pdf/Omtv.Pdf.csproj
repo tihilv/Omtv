@@ -4,20 +4,22 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>9</LangVersion>
         <Nullable>enable</Nullable>
-        <Title>Omtv Excel Output</Title>
+        <Title>Omtv Pdf Output</Title>
         <Authors>Ilia Tikhonov</Authors>
-        <Description>Excel visualizer for Omtv (One More Table Visualizer)</Description>
+        <Description>Pdf visualizer for Omtv (One More Table Visualizer)</Description>
         <PackageProjectUrl>https://github.com/tihilv/Omtv</PackageProjectUrl>
         <RepositoryUrl>https://github.com/tihilv/Omtv</RepositoryUrl>
         <Version>1.0.10</Version>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Omtv.Api\Omtv.Api.csproj" />
+        <ProjectReference Include="..\Omtv.Api\Omtv.Api.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Open-XML-SDK" Version="2.9.1" />
+      <PackageReference Include="PdfSharpCore" Version="1.3.45" />
+      <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.1" />
     </ItemGroup>
+
 
 </Project>

@@ -20,6 +20,7 @@
       <ProjectReference Include="..\Omtv.Engine\Omtv.Engine.csproj" />
       <ProjectReference Include="..\Omtv.Excel\Omtv.Excel.csproj" />
       <ProjectReference Include="..\Omtv.Html\Omtv.Html.csproj" />
+      <ProjectReference Include="..\Omtv.Pdf\Omtv.Pdf.csproj" />
     </ItemGroup>
 
 </Project>
