@@ -9,7 +9,7 @@ using Omtv.Api.Primitives;
 using Omtv.Api.Processing;
 using Omtv.Api.Utils;
 using PdfSharpCore.Drawing;
-using PdfSharpCore.Drawing.Layout;
+using PdfSharpCore.Fonts;
 using PdfSharpCore.Pdf;
 
 namespace Omtv.Pdf
@@ -44,6 +44,12 @@ namespace Omtv.Pdf
             _pdfDocument = new PdfDocument();
             _fontCache = new FontCache();
             _graphicsCache = new GraphicsCache();
+        }
+
+        public void SetupFonts(params string[] fonts)
+        {
+            CustomFontResolver.SetupFontsFiles(fonts);
+            GlobalFontSettings.FontResolver = new CustomFontResolver();
         }
 
         public ValueTask StartAsync(Document document)
@@ -296,9 +302,5 @@ namespace Omtv.Pdf
             _pdfDocument.Save(_stream);
             return new ValueTask();
         }
-
-        
-        
-        
     }
 }

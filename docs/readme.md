@@ -128,3 +128,11 @@ Measure represents a value with unit. Supported units are:
 - Pixels (15 px),
 - Em (3 em),
 - Millimeters (297 mm).
+
+## Special Features
+### PDF
+To use external fonts, a setup is required:
+```
+var pdfOutput = new PdfTableOutput(outputStream);
+pdfOutput.SetupFonts("font1.ttf", "font2.ttf", ...);
+```
