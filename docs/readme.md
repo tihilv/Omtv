@@ -92,12 +92,62 @@ Row section contains the following properties:
 | `width`   | 'Measure' | Width of the cell.                                    |
 | `rowSpan` | 'Integer' | Number of rows to merge including the current one.    |
 | `colSpan` | 'Integer' | Number of columns to merge including the current one. |
-| `header`   | 'any'    | Is the cell a header. Can be used for HTML format.    |
+| `header`  | 'any'     | Is the cell a header. Can be used for HTML format.    |
 | -Content- | 'String'  | Value of the cell.                                    |
+| -Children-| 'Chart'   | Chart embedded in the cell.                           |
 
 Merged by rowSpan and colSpan cells should not present in the document. 
 
 If row is a header, a cell becomes a header automatically.
+
+### Chart (\<chart\>)
+A chart resides in a TableCell and respects its configuration and size. Charts are supported in HTML, PDF, and Excel implementations of `ITableOutput`.
+
+Chart attributes:
+
+| Name         | Type        | Comment                                                                                   |
+|--------------|-------------|-------------------------------------------------------------------------------------------|
+| `type`       | 'ChartType' | Chart type: `Bar` (default), `Line`, or `Pie`.                                            |
+| `title`      | 'String'    | Chart title.                                                                              |
+| `showLegend` | 'Boolean'   | Whether to show a legend (`true`/`false`, `1`/`0`, `yes`/`no`). Default is `false`.       |
+| `categories` | 'String'    | Comma-, semicolon-, or pipe-separated list of category labels.                            |
+
+Chart child elements:
+- `<categories>`: Comma-separated list of categories or nested `<category>` / `<label>` elements.
+- `<title>`: Chart title text.
+- `<legend>` / `<showLegend>`: Boolean flag indicating if legend should be displayed.
+- `<series>`: Data series of the chart (supports arbitrary number of series).
+
+Series (`<series>`) properties & attributes:
+
+| Name     | Type       | Comment                                                          |
+|----------|------------|------------------------------------------------------------------|
+| `header` | 'String'   | Series name/header used for identification and legend.           |
+| `color`  | 'Color'    | Custom color for the series.                                     |
+| `values` | 'Double[]' | Comma-, semicolon-, space-, or newline-separated numerical data. |
+
+Series data can also be specified as child `<value>` or `<val>` elements inside `<series>`.
+
+#### Example with Chart:
+```xml
+<table name="Sales Report">
+    <row height="80mm">
+        <cell width="50%">
+            <chart type="Bar" showLegend="true" title="Quarterly Revenue">
+                <categories>Q1, Q2, Q3, Q4</categories>
+                <series header="2025" color="blue" values="120, 150, 180, 210" />
+                <series header="2026" color="orange" values="140, 165, 195, 240" />
+            </chart>
+        </cell>
+        <cell width="50%">
+            <chart type="Pie" showLegend="true" title="Market Share">
+                <categories>Product A, Product B, Product C</categories>
+                <series header="Share" values="55, 30, 15" />
+            </chart>
+        </cell>
+    </row>
+</table>
+```
 
 ### Primitives
 

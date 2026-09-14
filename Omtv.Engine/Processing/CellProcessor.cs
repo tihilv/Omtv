@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using System.Xml;
+using Omtv.Api.Model;
 using Omtv.Api.Processing;
 
 namespace Omtv.Engine.Processing
@@ -26,17 +27,40 @@ namespace Omtv.Engine.Processing
             if (!Byte.TryParse(colSpanStr, out var colSpan))
                 colSpan = 1;
 
-            await reader.ReadAsync();
-            var value = PrepareValue(reader.Value);
+            String? value = null;
+            Chart? chart = null;
+
+            if (!reader.IsEmptyElement)
+            {
+                var cellDepth = reader.Depth;
+                while (await reader.ReadAsync())
+                {
+                    if (reader.Depth <= cellDepth && reader.NodeType == XmlNodeType.EndElement && reader.Name.Equals("cell", StringComparison.OrdinalIgnoreCase))
+                    {
+                        break;
+                    }
+
+                    if (reader.NodeType == XmlNodeType.Element && reader.Name.Equals("chart", StringComparison.OrdinalIgnoreCase))
+                    {
+                        chart = await ChartProcessor.ProcessAsync(reader);
+                    }
+                    else if (reader.NodeType == XmlNodeType.Text || reader.NodeType == XmlNodeType.CDATA || reader.NodeType == XmlNodeType.SignificantWhitespace)
+                    {
+                        value = (value ?? "") + reader.Value;
+                    }
+                }
+            }
+
+            value = PrepareValue(value);
             
             await ProcessSpannedCellsAsync(context);
 
-            context.Document.Table.Row.Cell.Set(value, rowSpan, colSpan, header, style);
+            context.Document.Table.Row.Cell.Set(value, rowSpan, colSpan, header, style, chart);
             context.Document.SpanStore.Register(rowSpan, colSpan);
             await context.Output.CellAsync(context.Document);
         }
 
-        private String? PrepareValue(String value)
+        private String? PrepareValue(String? value)
         {
             if (String.IsNullOrEmpty(value))
                 return value;

@@ -30,6 +30,7 @@ namespace Omtv.Excel
         private Row _row;
 
         private readonly List<(CellFormat, Style)> _lastRowCellFormats;
+        private readonly List<(Int32 RowIndex, Int32 ColIndex, Int32 RowSpan, Int32 ColSpan, Omtv.Api.Model.Chart Chart)> _pendingCharts;
 
         public ExcelTableOutput(Stream stream)
         {
@@ -38,6 +39,7 @@ namespace Omtv.Excel
             _textManager = new ExcelTextManager();
 
             _lastRowCellFormats = new List<(CellFormat, Style)>();
+            _pendingCharts = new List<(Int32, Int32, Int32, Int32, Omtv.Api.Model.Chart)>();
         }
 
         public async ValueTask StartAsync(Document document)
@@ -58,6 +60,7 @@ namespace Omtv.Excel
         
         public async ValueTask TableStartAsync(Document document)
         {
+            _pendingCharts.Clear();
             _worksheetPart = _workbookPart.AddNewPart<WorksheetPart>();
             _worksheetPart.Worksheet = new Worksheet(new Columns(), new SheetData(), new MergeCells(), ExcelMeasurementManager.GetPageMargins(document.Header.Margin), ExcelMeasurementManager.GetPageSetup(document));
 
@@ -115,14 +118,22 @@ namespace Omtv.Excel
             var cell = row.Cell;
             var newCell = CreateCell(row.Index, cell.Index);
             
-            if (!cell.Spanned && cell.Content != null)
+            if (!cell.Spanned)
             {
-                newCell.CellValue = new CellValue(_textManager.GetCellTextIndex(cell.Content).ToString());
-                newCell.DataType = new EnumValue<CellValues>(CellValues.SharedString);
+                if (cell.Chart != null)
+                {
+                    _pendingCharts.Add((row.Index, cell.Index, cell.RowSpan, cell.ColSpan, cell.Chart));
+                }
+
+                if (cell.Content != null)
+                {
+                    newCell.CellValue = new CellValue(_textManager.GetCellTextIndex(cell.Content).ToString());
+                    newCell.DataType = new EnumValue<CellValues>(CellValues.SharedString);
+                }
                 
                 var style = document.Table.Row.Cell.GetCombinedStyle();
                 var borderId = _stylesheetManager.BorderManager.GetBorders(document.Table.GetCombinedStyle(), style, cell.Index == 1, isTop: row.Index == 1);
-                newCell.StyleIndex = _stylesheetManager.CellFormatManager.GetCellPropertiesIndex(newCell, style, borderId, cell.Content.Contains(Environment.NewLine), out var cellFormat);
+                newCell.StyleIndex = _stylesheetManager.CellFormatManager.GetCellPropertiesIndex(newCell, style, borderId, cell.Content != null && cell.Content.Contains(Environment.NewLine), out var cellFormat);
                 _lastRowCellFormats.Add((cellFormat, style));
 
                 _mergeCellManager.AddMergedCellsIfNeeded(document.Table);
@@ -157,6 +168,13 @@ namespace Omtv.Excel
             }
 
             _mergeCellManager.MergeCellsIfNeeded();
+
+            var chartId = 1;
+            foreach (var pendingChart in _pendingCharts)
+            {
+                ExcelChartRenderer.AddChartToWorksheet(_worksheetPart, pendingChart.Chart, pendingChart.RowIndex, pendingChart.ColIndex, pendingChart.RowSpan, pendingChart.ColSpan, chartId++);
+            }
+
             _worksheetPart.Worksheet.Save();
         }
         

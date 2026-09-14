@@ -1,4 +1,5 @@
 ﻿using System;
+using Omtv.Api.Model;
 using PdfSharpCore.Drawing;
 
 namespace Omtv.Pdf
@@ -12,18 +13,20 @@ namespace Omtv.Pdf
         public XFont Font { get; }
 
         public String? Content { get; }
+        public Chart? Chart { get; }
         public XBrush BackBrush { get; }
         public XBrush ForeBrush { get; }
         public XStringFormat StringFormat { get; }
         public PdfBorders Borders { get; }
 
-        public PdfTableCell(XUnit left, XUnit width, Int32 rowStart, Int32 rowEnd, XFont font, String? content, XBrush backBrush, XBrush foreBrush, XStringFormat stringFormat, PdfBorders borders)
+        public PdfTableCell(XUnit left, XUnit width, Int32 rowStart, Int32 rowEnd, XFont font, String? content, XBrush backBrush, XBrush foreBrush, XStringFormat stringFormat, PdfBorders borders, Chart? chart = null)
         {
             RowStart = rowStart;
             RowEnd = rowEnd;
             Font = font;
             Width = width;
             Content = content;
+            Chart = chart;
             BackBrush = backBrush;
             ForeBrush = foreBrush;
             StringFormat = stringFormat;

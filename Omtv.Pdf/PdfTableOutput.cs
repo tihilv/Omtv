@@ -107,8 +107,18 @@ namespace Omtv.Pdf
 
                 XFont font = _fontCache.GetFont(fontInfo, document.Table.Row.IsHeader);
 
-                var measure = _measureContext.MeasureString(cell.Content, font);
-                var normalizedRowHeight = measure.Height / cell.RowSpan;
+                XUnit normalizedRowHeight;
+                if (cell.Chart != null)
+                {
+                    normalizedRowHeight = document.Table.Row.Height != null
+                        ? document.Table.Row.Height.Value.ToXUnit(document.Header.ContentHeight) / cell.RowSpan
+                        : XUnit.FromPoint(160) / cell.RowSpan;
+                }
+                else
+                {
+                    var measure = _measureContext.MeasureString(cell.Content ?? String.Empty, font);
+                    normalizedRowHeight = measure.Height / cell.RowSpan;
+                }
 
                 for (Int32 i = document.Table.Row.Index; i <= document.Table.Row.Index + cell.RowSpan - 1; i++)
                     SetRowHeight(i, normalizedRowHeight);
@@ -128,7 +138,7 @@ namespace Omtv.Pdf
                         _graphicsCache.GetPen(style.Border[Side.Bottom]));
                 }
                 
-                var pdfCell = new PdfTableCell(_currentLeft, cellWidth, row.Index - 1, row.Index + cell.RowSpan - 2, font, cell.Content, backBrush, foreBrush, stringFormat, pdfBorders);
+                var pdfCell = new PdfTableCell(_currentLeft, cellWidth, row.Index - 1, row.Index + cell.RowSpan - 2, font, cell.Content, backBrush, foreBrush, stringFormat, pdfBorders, cell.Chart);
                 _currentRowCells.Add(pdfCell);
             }
             else
@@ -218,7 +228,11 @@ namespace Omtv.Pdf
                     if (cell.Borders.Right != null)
                         lines.Add((rightTop, rightBottom, cell.Borders.Right));
                     
-                    if (cell.Content != null)
+                    if (cell.Chart != null)
+                    {
+                        PdfChartRenderer.DrawChart(gfx!, cell.Chart, new XRect(left, top, right - left, bottom - top), cell.Font);
+                    }
+                    else if (cell.Content != null)
                     {
                         DrawString(gfx, cell.Content, cell.Font, cell.ForeBrush, new XRect(left, top, right - left, bottom - top), cell.StringFormat);
                     }

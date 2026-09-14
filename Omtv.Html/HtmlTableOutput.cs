@@ -66,28 +66,36 @@ namespace Omtv.Html
             var tag = (document.Table.Row.Cell.IsHeader) ? "th" : "td";
             if (!document.Table.Row.Cell.Spanned)
             {
-                var content = HttpUtility.HtmlEncode(document.Table.Row.Cell.Content!);
-                if (String.IsNullOrEmpty(content))
-                    content = "&nbsp;";
-                content = content.Replace(Environment.NewLine, "<br>");
+                var cell = document.Table.Row.Cell;
+                String content;
+                if (cell.Chart != null)
+                {
+                    content = HtmlChartRenderer.RenderSvg(cell.Chart);
+                }
+                else
+                {
+                    content = HttpUtility.HtmlEncode(cell.Content!);
+                    if (String.IsNullOrEmpty(content))
+                        content = "&nbsp;";
+                    content = content.Replace(Environment.NewLine, "<br>");
+                }
 
                 String colSpan = String.Empty;
-                if (document.Table.Row.Cell.ColSpan > 1)
-                    colSpan = $" colspan=\"{document.Table.Row.Cell.ColSpan}\"";
+                if (cell.ColSpan > 1)
+                    colSpan = $" colspan=\"{cell.ColSpan}\"";
 
                 String rowSpan = String.Empty;
-                if (document.Table.Row.Cell.RowSpan > 1)
-                    rowSpan = $" rowspan=\"{document.Table.Row.Cell.RowSpan}\"";
-
+                if (cell.RowSpan > 1)
+                    rowSpan = $" rowspan=\"{cell.RowSpan}\"";
 
                 Dictionary<String, String?>? additionalProperties = null;
-                var index = document.Table.Row.Cell.Index-1;
+                var index = cell.Index-1;
                 if (_processedColumns.Length > index && !_processedColumns[index] && String.IsNullOrEmpty(colSpan))
                 {
                     additionalProperties = new Dictionary<String, String?>() { ["width"] = Express(new Measure(_columnProcessor.ColumnWidths[index], document.Header.ContentWidth.Unit)) };
                     _processedColumns[index] = true;
                 }
-                await _writer.WriteLineAsync($"<{tag}{ExpressStyle(document.Table.Row.Cell.Style, additional: additionalProperties )}{colSpan}{rowSpan}>{content}</{tag}>");
+                await _writer.WriteLineAsync($"<{tag}{ExpressStyle(cell.Style, additional: additionalProperties )}{colSpan}{rowSpan}>{content}</{tag}>");
             }
         }
 

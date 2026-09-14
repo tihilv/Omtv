@@ -13,6 +13,7 @@ namespace Omtv.Api.Model
 
         public Style? Style { get; private set; } = null!;
         public String? Content { get; private set; }
+        public Chart? Chart { get; private set; }
         public Byte RowSpan { get; private set; }
         public Byte ColSpan { get; private set; }
         public Int32 Index { get; private set; }
@@ -24,12 +25,13 @@ namespace Omtv.Api.Model
             _document = document;
         }
         
-        internal void Set(String? content, Byte rowSpan, Byte colSpan, Boolean isHeader, Style? style)
+        internal void Set(String? content, Byte rowSpan, Byte colSpan, Boolean isHeader, Style? style, Chart? chart = null)
         {
             Index++;
             _combinedStyle = null;
             Style = style;
             Content = content;
+            Chart = chart;
             RowSpan = rowSpan;
             ColSpan = colSpan;
             _isHeader = isHeader;
@@ -43,7 +45,7 @@ namespace Omtv.Api.Model
 
         internal void SetSpanned()
         {
-            Set(null, 0, 0, false, Style);
+            Set(null, 0, 0, false, Style, null);
             Spanned = true;
         }
         

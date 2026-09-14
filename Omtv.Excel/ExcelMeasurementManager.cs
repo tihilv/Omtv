@@ -143,7 +143,7 @@ namespace Omtv.Excel
 
             foreach (var tuple in _sizes)
                 if (tuple.Width >= width && tuple.Height >= height)
-                    return new PageSetup() { PaperSize = tuple.Index, Orientation = orientation, HorizontalDpi = 0U, VerticalDpi = 0U, Id = $"rId{document.Table.Index}" };
+                    return new PageSetup() { PaperSize = tuple.Index, Orientation = orientation, Id = $"rId{document.Table.Index}" };
 
             throw new ArgumentException($"No appropriate page size found.");
         }
