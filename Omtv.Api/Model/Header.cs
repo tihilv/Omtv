@@ -20,25 +20,16 @@ namespace Omtv.Api.Model
                 var left = Margin[Side.Left];
                 var right = Margin[Side.Right];
 
-                if (left == null && right == null)
-                    return pageSize;
-
                 var value = pageSize.Value;
-                if (left != null)
-                {
-                    if (left.Unit != pageSize.Unit)
-                        throw new ArgumentException(UnitsExceptionText);
+                if (left.Unit != pageSize.Unit)
+                    throw new ArgumentException(UnitsExceptionText);
 
-                    value -= left.Value;
-                }
+                value -= left.Value;
 
-                if (right != null)
-                {
-                    if (right.Unit != pageSize.Unit)
-                        throw new ArgumentException(UnitsExceptionText);
+                if (right.Unit != pageSize.Unit)
+                    throw new ArgumentException(UnitsExceptionText);
 
-                    value -= right.Value;
-                }
+                value -= right.Value;
 
                 return new Measure(value, pageSize.Unit);
             }
@@ -53,25 +44,16 @@ namespace Omtv.Api.Model
                 var top = Margin[Side.Top];
                 var bottom = Margin[Side.Bottom];
 
-                if (top == null && bottom == null)
-                    return pageSize;
-
                 var value = pageSize.Value;
-                if (top != null)
-                {
-                    if (top.Unit != pageSize.Unit)
-                        throw new ArgumentException(UnitsExceptionText);
+                if (top.Unit != pageSize.Unit)
+                    throw new ArgumentException(UnitsExceptionText);
 
-                    value -= top.Value;
-                }
+                value -= top.Value;
 
-                if (bottom != null)
-                {
-                    if (bottom.Unit != pageSize.Unit)
-                        throw new ArgumentException(UnitsExceptionText);
+                if (bottom.Unit != pageSize.Unit)
+                    throw new ArgumentException(UnitsExceptionText);
 
-                    value -= bottom.Value;
-                }
+                value -= bottom.Value;
 
                 return new Measure(value, pageSize.Unit);
             }
@@ -88,7 +70,7 @@ namespace Omtv.Api.Model
             PageWidth = value;
         }
 
-        internal void SetDocumentName(String value)
+        internal void SetDocumentName(String? value)
         {
             DocumentName = value;
         }

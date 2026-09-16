@@ -30,7 +30,7 @@ namespace Omtv.Api.Primitives
             return $"{Value} {Unit}";
         }
 
-        public static Measure ParseExact(String value, Unit? defaultUnit = null)
+        public static Measure ParseExact(String? value, Unit? defaultUnit = null)
         {
             var result = Parse(value, defaultUnit);
             if (result == null)

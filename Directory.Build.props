@@ -1,0 +1,11 @@
+<Project>
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.1;net10.0</TargetFrameworks>
+        <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
+        <Authors>Ilia Tikhonov</Authors>
+        <PackageProjectUrl>https://github.com/tihilv/Omtv</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/tihilv/Omtv</RepositoryUrl>
+        <Version>1.5.3</Version>
+    </PropertyGroup>
+</Project>

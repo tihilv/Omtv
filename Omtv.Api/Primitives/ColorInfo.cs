@@ -23,7 +23,7 @@ namespace Omtv.Api.Primitives
 
             foreach (var member in typeof(Color).GetProperties(BindingFlags.Static | BindingFlags.Public))
             {
-                var color = (Color)member.GetValue(null);
+                var color = (Color)member.GetValue(null)!;
                 var colorInfo = new ColorInfo(color.A, color.R, color.G, color.B);
                 _colorsByName.Add(member.Name.ToLower(), colorInfo);
                 _nameByColors[colorInfo] = member.Name;
